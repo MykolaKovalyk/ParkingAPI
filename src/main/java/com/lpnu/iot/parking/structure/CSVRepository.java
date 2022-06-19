@@ -14,7 +14,11 @@ import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -25,7 +29,7 @@ public abstract class CSVRepository<Res extends Resource> {
 
     @Getter
     @Setter(AccessLevel.PROTECTED)
-    private String filePath;
+    private String resourceRootPath;
 
     @Getter
     private long idSequence = 0;
@@ -33,7 +37,7 @@ public abstract class CSVRepository<Res extends Resource> {
 
 
     public CSVRepository(String filePath) {
-        this.filePath = filePath;
+        this.resourceRootPath = filePath;
 
         try {
             var rootDir = new File(filePath).getParent();
@@ -47,7 +51,7 @@ public abstract class CSVRepository<Res extends Resource> {
 
         try {
             readDataFromFile();
-        } catch (FileNotFoundException exc) {
+        } catch (IOException exc) {
             try {
                 System.out.println(this.getClass().toString() + ": CSV file not found, creating a new one...");
                 saveDataToFile();
@@ -120,30 +124,67 @@ public abstract class CSVRepository<Res extends Resource> {
     }
 
     public void readDataFromFile() throws IOException, CsvValidationException {
-        try (FileReader fileReader = new FileReader(filePath);
-             CSVReader reader = new CSVReader(fileReader)) {
 
-            var names  = reader.readNext();
-            var sequence = reader.readNext()[1];
-            idSequence = Long.parseLong(sequence);
 
-            String[] record;
-            while ((record = reader.readNext()) != null) {
+        final SimpleDateFormat FILE_NAME_DATE_FORMAT = new SimpleDateFormat("yyyy_MM_dd");
+        final SimpleDateFormat MONTH_DATE_FORMAT = new SimpleDateFormat("yyyy_MMM");
 
-                Res newResource = createNewResource();
-                newResource.fromArrayOfStrings(record);
+        File tableRootDirectory = Paths.get(
+                resourceRootPath,
+                MONTH_DATE_FORMAT.format(new Date())
+        ).toFile();
 
-                dataTable.put(newResource.getId(), newResource);
+        if(!tableRootDirectory.exists()) {
+            throw new IOException("Directory not found!");
+        }
+
+        File[] tables = tableRootDirectory.listFiles();
+
+        if (tables == null) {
+            throw new IOException("tableRootDirectory is a file!");
+        }
+
+        dataTable.clear();
+        for (var file : tables) {
+            try (FileReader fileReader = new FileReader(file);
+                 CSVReader reader = new CSVReader(fileReader)) {
+
+                var names = reader.readNext();
+
+                String[] record;
+                while ((record = reader.readNext()) != null) {
+
+                    Res newResource = createNewResource();
+                    newResource.fromArrayOfStrings(record);
+
+                    if(newResource.getId() > idSequence) {
+                        idSequence = newResource.getId();
+                    }
+
+                    dataTable.put(newResource.getId(), newResource);
+                }
             }
         }
     }
 
     public void saveDataToFile() throws IOException {
-        try (FileWriter fileWriter = new FileWriter(filePath);
+
+        final SimpleDateFormat FILE_NAME_DATE_FORMAT = new SimpleDateFormat("yyyy_MM_dd");
+        final SimpleDateFormat MONTH_DATE_FORMAT = new SimpleDateFormat("yyyy_MMM");
+
+        var currentDate = new Date();
+        File tableFile = Paths.get(
+                resourceRootPath,
+                MONTH_DATE_FORMAT.format(currentDate),
+                FILE_NAME_DATE_FORMAT.format(currentDate) + ".csv"
+        ).toFile();
+
+        new File(tableFile.getParent()).mkdirs();
+
+        try (FileWriter fileWriter = new FileWriter(tableFile);
              CSVWriter writer = new CSVWriter(fileWriter)) {
 
             writer.writeNext(createNewResource().fieldNamesToStringArray());
-            writer.writeNext(new String[]{ "idSequence", String.valueOf(idSequence) }, false);
 
             for (Map.Entry<Long, Res> entry : dataTable.entrySet()) {
                 writer.writeNext(entry.getValue().toArrayOfStrings(), false);

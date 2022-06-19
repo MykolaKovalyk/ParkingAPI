@@ -12,6 +12,6 @@ public class ClientCardRepository extends CSVRepository<ClientCard> {
     }
 
     public ClientCardRepository() {
-        super("data/client_cards.csv");
+        super("data/client_cards");
     }
 }

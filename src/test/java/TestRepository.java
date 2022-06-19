@@ -1,9 +1,3 @@
-import com.lpnu.iot.parking.resources.Resource;
-import com.lpnu.iot.parking.structure.CSVRepository;
-import junit.framework.TestCase;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -38,7 +32,7 @@ public class TestRepository {
 
     @AfterAll
     public static void cleanUp() {
-        File toDelete =  new File(repository.getFilePath());
+        File toDelete =  new File(repository.getResourceRootPath());
         if(!toDelete.delete()) {
             System.out.println("Warning: test file was not deleted!");
         } else {

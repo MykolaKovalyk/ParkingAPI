@@ -12,6 +12,6 @@ public class ParkingSlotRepository extends CSVRepository<ParkingSlot> {
     }
 
     public ParkingSlotRepository() {
-        super("data/parking_slots.csv");
+        super("data/parking_slots");
     }
 }
