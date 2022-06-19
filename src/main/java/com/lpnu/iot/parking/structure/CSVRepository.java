@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -124,8 +123,9 @@ public abstract class CSVRepository<Res extends Resource> {
         try (FileReader fileReader = new FileReader(filePath);
              CSVReader reader = new CSVReader(fileReader)) {
 
-            var seq = reader.readNext()[0];
-            idSequence = Long.parseLong(seq);
+            var names  = reader.readNext();
+            var sequence = reader.readNext()[1];
+            idSequence = Long.parseLong(sequence);
 
             String[] record;
             while ((record = reader.readNext()) != null) {
@@ -142,7 +142,8 @@ public abstract class CSVRepository<Res extends Resource> {
         try (FileWriter fileWriter = new FileWriter(filePath);
              CSVWriter writer = new CSVWriter(fileWriter)) {
 
-            writer.writeNext(new String[]{String.valueOf(idSequence), }, false);
+            writer.writeNext(createNewResource().fieldNamesToStringArray());
+            writer.writeNext(new String[]{ "idSequence", String.valueOf(idSequence) }, false);
 
             for (Map.Entry<Long, Res> entry : dataTable.entrySet()) {
                 writer.writeNext(entry.getValue().toArrayOfStrings(), false);

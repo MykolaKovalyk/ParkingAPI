@@ -15,5 +15,6 @@ public abstract class Resource {
     private Long id = 0L;
 
     public abstract String[] toArrayOfStrings();
+    public abstract String[] fieldNamesToStringArray();
     public abstract void fromArrayOfStrings(String[] csv);
 }

@@ -35,6 +35,18 @@ public class ParkingTicket extends Resource {
     }
 
     @Override
+    public String[] fieldNamesToStringArray() {
+        return new String[] {
+                "id",
+                "ownerClientId",
+                "parkingFacilityId",
+                "timeOfActivation",
+                "timeOfDeactivation",
+                "carNumber",
+                "parkingSlotId"};
+    }
+
+    @Override
     public void fromArrayOfStrings(String[] csv) {
         setId(Long.parseLong(csv[0]));
         ownerClientId = Long.parseLong(csv[1]);

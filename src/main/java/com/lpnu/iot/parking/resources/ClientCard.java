@@ -38,6 +38,21 @@ public class ClientCard extends Resource {
     }
 
     @Override
+    public String[] fieldNamesToStringArray() {
+        return new String[] {
+                "id",
+                "cardName",
+                "ownerClientId",
+                "cardType",
+                "details",
+                "shopOfRetrievalId",
+                "dateOfRetrieval",
+                "lastUsage",
+                "timesUsed",
+        };
+    }
+
+    @Override
     public void fromArrayOfStrings(String[] csv) {
         setId(Long.parseLong(csv[0]));
         ownerClientId = Long.parseLong(csv[1]);

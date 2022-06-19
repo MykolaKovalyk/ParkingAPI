@@ -22,6 +22,14 @@ public class ParkingFacility extends Resource {
     }
 
     @Override
+    public String[] fieldNamesToStringArray() {
+        return new String[] {
+                "id",
+                "belongingShopId"
+        };
+    }
+
+    @Override
     public void fromArrayOfStrings(String[] csv) {
         setId(Long.parseLong(csv[0]));
         belongingShopId = Long.parseLong(csv[1]);

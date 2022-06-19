@@ -28,6 +28,17 @@ public class Client extends Resource {
     }
 
     @Override
+    public String[] fieldNamesToStringArray() {
+        return new String[] {
+                "id",
+                "name",
+                "phoneNumber",
+                "email",
+                "cardId"
+        };
+    }
+
+    @Override
     public void fromArrayOfStrings(String[] csv) {
          setId(Long.parseLong(csv[0]));
         name = csv[1];
