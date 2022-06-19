@@ -33,7 +33,11 @@ public abstract class CSVRepository<Res extends Resource> {
 
         try {
             var rootDir = new File(filePath).getParent();
-            new File(rootDir).mkdirs();
+
+            if (rootDir != null && rootDir.length() > 0) {
+                new File(rootDir).mkdirs();
+            }
+
         } catch (Exception e) {
             System.out.println(this.getClass().toString() + ": Failed to create dirs:");
             e.printStackTrace();

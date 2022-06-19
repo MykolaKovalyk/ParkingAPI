@@ -9,10 +9,10 @@ import java.text.SimpleDateFormat;
 @Setter
 public abstract class Resource {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 
-    private Long id = -1L;
+    private Long id = 0L;
 
     public abstract String[] toArrayOfStrings();
     public abstract void fromArrayOfStrings(String[] csv);

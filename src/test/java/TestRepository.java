@@ -3,12 +3,17 @@ import com.lpnu.iot.parking.structure.CSVRepository;
 import junit.framework.TestCase;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
 
 @AllArgsConstructor
 @NoArgsConstructor
-class TestResource extends Resource {
+class DecoyResource extends Resource {
 
     public int someInt;
     public String someString;
@@ -33,32 +38,32 @@ class TestResource extends Resource {
     }
 }
 
-class TestRepository extends CSVRepository<TestResource> {
+class DecoyRepository extends CSVRepository<DecoyResource> {
 
-    public TestRepository() {
+    public DecoyRepository() {
         super("test_file.csv");
     }
 
 
     @Override
-    protected TestResource createNewResource() {
-        return new TestResource();
+    protected DecoyResource createNewResource() {
+        return new DecoyResource();
     }
 }
 
 
 
-public class RepositoryTest extends TestCase {
+public class TestRepository {
 
-
+    @Test
     public  void testRepository() throws Exception {
 
-        TestRepository repository = new TestRepository();
+        DecoyRepository repository = new DecoyRepository();
 
-        var testSubjects =  new TestResource[] {
-                new TestResource(-4, "William", true),
-                new TestResource(5836, "Marcus", false),
-                new TestResource(5, "Jenny, Robert", true)
+        var testSubjects =  new DecoyResource[] {
+                new DecoyResource(-4, "William", true),
+                new DecoyResource(5836, "Marcus", false),
+                new DecoyResource(5, "Jenny, Robert", true)
         };
 
         repository.save(testSubjects[0]);
