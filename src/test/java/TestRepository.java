@@ -70,7 +70,7 @@ public class TestRepository {
         repository.save(testSubjects[1]);
         repository.save(testSubjects[2]);
 
-        repository.saveDataToFile();
+        repository.saveToFileIfNecessary();
 
         repository.readDataFromFile();
 

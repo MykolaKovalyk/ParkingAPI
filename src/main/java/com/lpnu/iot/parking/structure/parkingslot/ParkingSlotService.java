@@ -36,11 +36,26 @@ public class ParkingSlotService {
             Long parkingFacilityId,
             Boolean forDisabled
     ) {
-        return parkingSlotRepository.save(new ParkingSlot(parkingFacilityId, ParkingSlot.FREE_SLOT_TICKET, forDisabled));
+
+        var added = parkingSlotRepository.save(
+                new ParkingSlot(
+                        parkingFacilityId,
+                        ParkingSlot.FREE_SLOT_TICKET,
+                        forDisabled));
+
+
+        parkingSlotRepository.saveToFileIfNecessary();
+
+        return added;
     }
 
     public ParkingSlot removeParkingSlot(Long parkingSlotId) {
-        return parkingSlotRepository.remove(parkingSlotId);
+        var removed = parkingSlotRepository.remove(parkingSlotId);
+
+        parkingSlotRepository.saveToFileIfNecessary();
+        parkingTicketRepository.saveToFileIfNecessary();
+
+        return removed;
     }
 
     public ParkingTicket takeParkingSlot(
@@ -67,6 +82,9 @@ public class ParkingSlotService {
 
         eligibleParkingSlot.setActiveTicketId(newTicket.getId());
 
+        parkingSlotRepository.saveToFileIfNecessary();
+        parkingTicketRepository.saveToFileIfNecessary();
+
         return newTicket;
     }
 
@@ -77,6 +95,9 @@ public class ParkingSlotService {
 
         var slotToFree =  parkingSlotRepository.findById(ticketToDeactivate.getParkingSlotId());
         slotToFree.setActiveTicketId(ParkingSlot.FREE_SLOT_TICKET);
+
+        parkingSlotRepository.saveToFileIfNecessary();
+        parkingTicketRepository.saveToFileIfNecessary();
 
         return slotToFree;
     }

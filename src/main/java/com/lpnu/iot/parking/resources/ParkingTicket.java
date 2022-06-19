@@ -28,7 +28,7 @@ public class ParkingTicket extends Resource {
                 Long.toString(ownerClientId),
                 Long.toString(parkingFacilityId),
                 DATE_FORMAT.format(timeOfActivation),
-                DATE_FORMAT.format(timeOfDeactivation),
+                timeOfDeactivation == null ? null : DATE_FORMAT.format(timeOfDeactivation),
                 carNumber,
                 Long.toString(parkingSlotId)
         };
@@ -41,8 +41,8 @@ public class ParkingTicket extends Resource {
         parkingFacilityId =  Long.parseLong(csv[2]);
 
         try {
-            timeOfActivation = DATE_FORMAT.parse(csv[3]);
-            timeOfDeactivation = DATE_FORMAT.parse(csv[4]);
+            timeOfActivation = csv[3].length() > 0 ? DATE_FORMAT.parse(csv[3]) : null;
+            timeOfDeactivation = csv[4].length() > 0 ? DATE_FORMAT.parse(csv[4]) : null;
         } catch (ParseException e) {
             System.out.println("Parsing datetime failed!");
         }

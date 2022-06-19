@@ -34,7 +34,7 @@ public class ClientService {
 
         var newClientCard = new ClientCard(
                 name + "'s user card",
-                -1L,
+                clientRepository.getIdSequence() + 1,
                 "UserCard",
                 "",
                 shopId,
@@ -42,11 +42,18 @@ public class ClientService {
                 (Date) currentDate.clone(),
                 0);
 
-        var newClient = new Client(name, email, phoneNumber, -1L);
+        var newClient = new Client(
+                name,
+                email,
+                phoneNumber,
+                clientCardRepository.getIdSequence() + 1);
 
 
-        newClientCard.setOwnerClientId(clientRepository.save(newClient).getId());
-        newClient.setCardId(clientCardRepository.save(newClientCard).getId());
+        clientRepository.save(newClient);
+        clientCardRepository.save(newClientCard);
+
+        clientRepository.saveToFileIfNecessary();
+        clientCardRepository.saveToFileIfNecessary();
 
         return newClient;
     }

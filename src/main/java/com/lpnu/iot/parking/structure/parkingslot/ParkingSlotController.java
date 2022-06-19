@@ -46,7 +46,7 @@ public class ParkingSlotController {
     ) {
         return parkingSlotService.addParkingSlot(
                 parkingFacilityId,
-                forDisabled
+                forDisabled != null && forDisabled
         );
     }
 
@@ -69,8 +69,8 @@ public class ParkingSlotController {
         return parkingSlotService.takeParkingSlot(
                 parkingFacilityId,
                 carNumber,
-                forDisabled,
-                clientId
+                forDisabled != null && forDisabled,
+                clientId == null ? 0 : clientId
         );
     }
 

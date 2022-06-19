@@ -4,7 +4,9 @@ import com.lpnu.iot.parking.resources.Resource;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -22,10 +25,12 @@ public abstract class CSVRepository<Res extends Resource> {
     private Map<Long, Res> dataTable = new HashMap<>();
 
     @Getter
+    @Setter(AccessLevel.PROTECTED)
     private String filePath;
 
     @Getter
     private long idSequence = 0;
+
 
 
     public CSVRepository(String filePath) {
@@ -33,16 +38,13 @@ public abstract class CSVRepository<Res extends Resource> {
 
         try {
             var rootDir = new File(filePath).getParent();
-
             if (rootDir != null && rootDir.length() > 0) {
                 new File(rootDir).mkdirs();
             }
-
         } catch (Exception e) {
             System.out.println(this.getClass().toString() + ": Failed to create dirs:");
             e.printStackTrace();
         }
-
 
         try {
             readDataFromFile();
@@ -55,7 +57,7 @@ public abstract class CSVRepository<Res extends Resource> {
                 internalExc.printStackTrace();
             }
         } catch (Exception exc) {
-            System.out.println(this.getClass().toString() + ": An error occurred while reading:");
+            System.out.println(this.getClass().toString() + ": An error occurred while reading a file:");
             exc.printStackTrace();
         }
     }
@@ -70,23 +72,16 @@ public abstract class CSVRepository<Res extends Resource> {
     }
 
 
+
     public Map<Long, Res> findAll() {
-
-        saveToFileIfNecessary();
-
         return Collections.unmodifiableMap(dataTable);
     }
 
     public Res findById(Long id) {
-
-        saveToFileIfNecessary();
-
         return dataTable.get(id);
     }
 
     public Map<Long, Res> findAll(Predicate<Res> predicate) {
-
-        saveToFileIfNecessary();
 
         Map<Long, Res> returned =  new HashMap<>();
         for (var pair : dataTable.entrySet()) {
@@ -100,8 +95,6 @@ public abstract class CSVRepository<Res extends Resource> {
 
     public Res findAny(Predicate<Res> predicate) {
 
-        saveToFileIfNecessary();
-
         for (var pair : dataTable.entrySet()) {
             if (predicate.test(pair.getValue())) {
                return pair.getValue();
@@ -111,36 +104,23 @@ public abstract class CSVRepository<Res extends Resource> {
         return null;
     }
 
-
     public Res save(Res newResource) {
         idSequence++;
         newResource.setId(idSequence);
         dataTable.put(idSequence, newResource);
 
-        saveToFileIfNecessary();
-
         return newResource;
     }
 
     public Res replace(Long idToReplace, Res newResource) {
-
-        var old = dataTable.replace(idToReplace, newResource);
-
-        saveToFileIfNecessary();
-
-        return old;
+        return dataTable.replace(idToReplace, newResource);
     }
 
     public Res remove(Long idToRemove) {
-
-        var old = dataTable.remove(idToRemove);
-
-        saveToFileIfNecessary();
-
-        return old;
+        return dataTable.remove(idToRemove);
     }
 
-    public void readDataFromFile() throws FileNotFoundException, IOException, CsvValidationException {
+    public void readDataFromFile() throws IOException, CsvValidationException {
         try (FileReader fileReader = new FileReader(filePath);
              CSVReader reader = new CSVReader(fileReader)) {
 
@@ -162,7 +142,7 @@ public abstract class CSVRepository<Res extends Resource> {
         try (FileWriter fileWriter = new FileWriter(filePath);
              CSVWriter writer = new CSVWriter(fileWriter)) {
 
-            writer.writeNext(new String[]{String.valueOf(idSequence),}, false);
+            writer.writeNext(new String[]{String.valueOf(idSequence), }, false);
 
             for (Map.Entry<Long, Res> entry : dataTable.entrySet()) {
                 writer.writeNext(entry.getValue().toArrayOfStrings(), false);

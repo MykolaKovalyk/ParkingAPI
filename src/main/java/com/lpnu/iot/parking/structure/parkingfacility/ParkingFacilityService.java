@@ -23,7 +23,11 @@ public class ParkingFacilityService {
     }
 
     public ParkingFacility addParkingFacility(Long shopId) {
-        return parkingFacilityRepository.save(new ParkingFacility(shopId));
+        var added = parkingFacilityRepository.save(new ParkingFacility(shopId));;
+
+        parkingFacilityRepository.saveToFileIfNecessary();
+
+        return added;
     }
 
 }
