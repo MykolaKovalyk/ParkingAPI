@@ -54,7 +54,7 @@ class TestRepository extends CSVRepository<TestResource> {
                 saveDataToFile();
             } catch (Exception internalExc) {
                 System.out.println("An error occurred while initializing a file:");
-                exc.printStackTrace();
+                internalExc.printStackTrace();
             }
         } catch (Exception exc) {
             System.out.println("An error occurred while reading:");
@@ -73,7 +73,7 @@ class TestRepository extends CSVRepository<TestResource> {
 
 public class RepositoryTest extends TestCase {
 
-    
+
     public  void testRepository() throws Exception {
 
         TestRepository repository = new TestRepository();
@@ -104,6 +104,8 @@ public class RepositoryTest extends TestCase {
         File toDelete =  new File(repository.getFilePath());
         if(!toDelete.delete()) {
             System.out.println("Warning: test file was not deleted!");
+        } else {
+            System.out.println("Test file was successfully deleted.");
         }
     }
 
