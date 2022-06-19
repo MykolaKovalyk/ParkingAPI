@@ -33,7 +33,7 @@ public class ClientController {
             @PathVariable String name,
             @RequestParam(required = false) String email,
             @RequestParam String phone
-    ) {
+    )  throws Exception {
         return clientService.addClient(
                 shopId,
                 name,

@@ -35,7 +35,7 @@ public class ParkingSlotService {
     public ParkingSlot addParkingSlot(
             Long parkingFacilityId,
             Boolean forDisabled
-    ) {
+    )  throws Exception {
 
         var added = parkingSlotRepository.save(
                 new ParkingSlot(
@@ -44,16 +44,16 @@ public class ParkingSlotService {
                         forDisabled));
 
 
-        parkingSlotRepository.saveToFileIfNecessary();
+        parkingSlotRepository.writeDataToFile();
 
         return added;
     }
 
-    public ParkingSlot removeParkingSlot(Long parkingSlotId) {
+    public ParkingSlot removeParkingSlot(Long parkingSlotId)  throws Exception {
         var removed = parkingSlotRepository.remove(parkingSlotId);
 
-        parkingSlotRepository.saveToFileIfNecessary();
-        parkingTicketRepository.saveToFileIfNecessary();
+        parkingSlotRepository.writeDataToFile();
+        parkingTicketRepository.writeDataToFile();
 
         return removed;
     }
@@ -63,7 +63,7 @@ public class ParkingSlotService {
             String carNumber,
             Boolean forDisabled,
             Long clientId
-    ) {
+    )  throws Exception {
 
         Boolean isForDisabled = forDisabled != null ? forDisabled : false;
         ParkingSlot eligibleParkingSlot =
@@ -82,13 +82,13 @@ public class ParkingSlotService {
 
         eligibleParkingSlot.setActiveTicketId(newTicket.getId());
 
-        parkingSlotRepository.saveToFileIfNecessary();
-        parkingTicketRepository.saveToFileIfNecessary();
+        parkingSlotRepository.writeDataToFile();
+        parkingTicketRepository.writeDataToFile();
 
         return newTicket;
     }
 
-    public ParkingSlot freeParkingSlot(Long ticketId) {
+    public ParkingSlot freeParkingSlot(Long ticketId)  throws Exception {
 
         var ticketToDeactivate =  parkingTicketRepository.findById(ticketId);
         ticketToDeactivate.setTimeOfDeactivation(new Date());
@@ -96,8 +96,8 @@ public class ParkingSlotService {
         var slotToFree =  parkingSlotRepository.findById(ticketToDeactivate.getParkingSlotId());
         slotToFree.setActiveTicketId(ParkingSlot.FREE_SLOT_TICKET);
 
-        parkingSlotRepository.saveToFileIfNecessary();
-        parkingTicketRepository.saveToFileIfNecessary();
+        parkingSlotRepository.writeDataToFile();
+        parkingTicketRepository.writeDataToFile();
 
         return slotToFree;
     }

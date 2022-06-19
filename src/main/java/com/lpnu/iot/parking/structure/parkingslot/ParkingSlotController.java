@@ -43,7 +43,7 @@ public class ParkingSlotController {
     public ParkingSlot addParkingSlot(
             @PathVariable Long parkingFacilityId,
             @RequestParam(required = false) Boolean forDisabled
-    ) {
+    )  throws Exception {
         return parkingSlotService.addParkingSlot(
                 parkingFacilityId,
                 forDisabled != null && forDisabled
@@ -54,7 +54,7 @@ public class ParkingSlotController {
     "parking-slots/{parkingSlotId}/remove")
     public ParkingSlot removeParkingSlot(
             @PathVariable Long parkingSlotId
-    ) {
+    )  throws Exception {
         return parkingSlotService.removeParkingSlot(parkingSlotId);
     }
 
@@ -65,7 +65,7 @@ public class ParkingSlotController {
             @PathVariable String carNumber,
             @RequestParam(required = false) Boolean forDisabled,
             @RequestParam(required = false) Long clientId
-    ) {
+    )  throws Exception {
         return parkingSlotService.takeParkingSlot(
                 parkingFacilityId,
                 carNumber,
@@ -78,7 +78,7 @@ public class ParkingSlotController {
             "parking-tickets/{ticketId}/free")
     public ParkingSlot freeParkingSlot(
             @PathVariable Long ticketId
-    ) {
+    )  throws Exception {
         return parkingSlotService.freeParkingSlot(ticketId);
     }
 }

@@ -22,10 +22,10 @@ public class ParkingFacilityService {
         return parkingFacilityRepository.findById(facilityId);
     }
 
-    public ParkingFacility addParkingFacility(Long shopId) {
-        var added = parkingFacilityRepository.save(new ParkingFacility(shopId));;
+    public ParkingFacility addParkingFacility(Long shopId)  throws Exception {
+        var added = parkingFacilityRepository.save(new ParkingFacility(shopId));
 
-        parkingFacilityRepository.saveToFileIfNecessary();
+        parkingFacilityRepository.writeDataToFile();
 
         return added;
     }

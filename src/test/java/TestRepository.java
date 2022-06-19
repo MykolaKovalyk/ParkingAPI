@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 import java.io.File;
-
-
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class TestRepository {
@@ -32,25 +32,31 @@ public class TestRepository {
 
     @AfterAll
     public static void cleanUp() {
-        File toDelete =  new File(repository.getResourceRootPath());
-        if(!toDelete.delete()) {
-            System.out.println("Warning: test file was not deleted!");
-        } else {
-            System.out.println("Test file was successfully deleted.");
-        }
+        deleteDirectory("test/");
     }
 
 
     @Test
-    public void testRepositoryWriteToFile() throws Exception {
+    public void testRepositoryIO() throws Exception {
 
         repository.save(testSubjects[0]);
         repository.save(testSubjects[1]);
         repository.save(testSubjects[2]);
 
-        repository.saveToFileIfNecessary();
+        var calendar = Calendar.getInstance();
+
+        var dayBefore = calendar.get(Calendar.DAY_OF_MONTH);
+        repository.writeDataToFile();
 
         repository.readDataFromFile();
+        var dayAfter = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if(dayBefore != dayAfter) {
+            System.out.println("Edge case: day mismatch, repeating the test...");
+
+            testRepositoryIO();
+            return;
+        }
 
         var found =  repository.findAll();
 
@@ -60,6 +66,25 @@ public class TestRepository {
                 found.get(1L).someInt == testSubjects[0].someInt);
 
         assertNull(found.get(0L));
+    }
+
+
+    private static void deleteDirectory(String path) {
+        File root =  new File(path);
+        File[] subfiles = root.listFiles();
+
+        if (subfiles != null) {
+            for (File subfile : subfiles) {
+
+                if (subfile.isDirectory()) {
+                    deleteDirectory(subfile.getAbsolutePath());
+                }
+
+                subfile.delete();
+            }
+        }
+
+        root.delete();
     }
 
 }

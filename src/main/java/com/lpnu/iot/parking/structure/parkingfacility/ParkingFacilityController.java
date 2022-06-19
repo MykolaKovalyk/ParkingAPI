@@ -37,7 +37,7 @@ public class ParkingFacilityController {
     "shops/{shopId}/parking-facilities/add")
     public ParkingFacility addParkingFacility(
         @PathVariable Long shopId
-    ) {
+    )  throws Exception {
         return parkingFacilityService.addParkingFacility(shopId);
     }
 }

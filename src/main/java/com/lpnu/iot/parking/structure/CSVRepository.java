@@ -11,10 +11,8 @@ import lombok.Setter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FileReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -54,22 +52,13 @@ public abstract class CSVRepository<Res extends Resource> {
         } catch (IOException exc) {
             try {
                 System.out.println(this.getClass().toString() + ": CSV file not found, creating a new one...");
-                saveDataToFile();
+                writeDataToFile();
             } catch (Exception internalExc) {
                 System.out.println(this.getClass().toString() + ": An error occurred while initializing a file:");
                 internalExc.printStackTrace();
             }
         } catch (Exception exc) {
             System.out.println(this.getClass().toString() + ": An error occurred while reading a file:");
-            exc.printStackTrace();
-        }
-    }
-
-    public void saveToFileIfNecessary() {
-        try {
-            saveDataToFile();
-        } catch (Exception exc) {
-            System.out.println(this.getClass().toString() + "An error occurred while saving:");
             exc.printStackTrace();
         }
     }
@@ -134,7 +123,7 @@ public abstract class CSVRepository<Res extends Resource> {
                 MONTH_DATE_FORMAT.format(new Date())
         ).toFile();
 
-        if(!tableRootDirectory.exists()) {
+        if (!tableRootDirectory.exists()) {
             throw new IOException("Directory not found!");
         }
 
@@ -157,7 +146,7 @@ public abstract class CSVRepository<Res extends Resource> {
                     Res newResource = createNewResource();
                     newResource.fromArrayOfStrings(record);
 
-                    if(newResource.getId() > idSequence) {
+                    if (newResource.getId() > idSequence) {
                         idSequence = newResource.getId();
                     }
 
@@ -167,7 +156,7 @@ public abstract class CSVRepository<Res extends Resource> {
         }
     }
 
-    public void saveDataToFile() throws IOException {
+    public void writeDataToFile() throws IOException {
 
         final SimpleDateFormat FILE_NAME_DATE_FORMAT = new SimpleDateFormat("yyyy_MM_dd");
         final SimpleDateFormat MONTH_DATE_FORMAT = new SimpleDateFormat("yyyy_MMM");
@@ -179,7 +168,10 @@ public abstract class CSVRepository<Res extends Resource> {
                 FILE_NAME_DATE_FORMAT.format(currentDate) + ".csv"
         ).toFile();
 
-        new File(tableFile.getParent()).mkdirs();
+        if (!tableFile.exists()) {
+            dataTable.clear();
+            new File(tableFile.getParent()).mkdirs();
+        }
 
         try (FileWriter fileWriter = new FileWriter(tableFile);
              CSVWriter writer = new CSVWriter(fileWriter)) {

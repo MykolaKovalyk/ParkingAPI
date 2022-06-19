@@ -28,7 +28,7 @@ public class ClientService {
             String name,
             String email,
             String phoneNumber
-    ) {
+    )  throws Exception {
 
         var currentDate = new Date();
 
@@ -52,8 +52,8 @@ public class ClientService {
         clientRepository.save(newClient);
         clientCardRepository.save(newClientCard);
 
-        clientRepository.saveToFileIfNecessary();
-        clientCardRepository.saveToFileIfNecessary();
+        clientRepository.writeDataToFile();
+        clientCardRepository.writeDataToFile();
 
         return newClient;
     }
