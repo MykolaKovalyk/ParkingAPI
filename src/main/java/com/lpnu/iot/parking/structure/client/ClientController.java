@@ -1,12 +1,31 @@
 package com.lpnu.iot.parking.structure.client;
 
-import com.lpnu.iot.parking.structure.client.ClientService;
+import com.lpnu.iot.parking.resources.Client;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 public class ClientController {
 
     @Autowired
     ClientService clientService;
+
+    @GetMapping(path =
+    "clients/{clientId}")
+    public Client getClient(
+            @PathVariable Long clientId
+    ) {
+        return null;
+    }
+
+    @PostMapping(path =
+    "shops/{shopId}/clients/add/{name}")
+    public Client addClient(
+            @PathVariable Long shopId,
+            @PathVariable String name,
+            @RequestParam String email,
+            @RequestParam String phoneNumber
+    ) {
+        return null;
+    }
 }
