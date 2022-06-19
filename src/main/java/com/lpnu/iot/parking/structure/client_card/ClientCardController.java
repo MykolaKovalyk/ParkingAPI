@@ -17,6 +17,6 @@ public class ClientCardController {
     public ClientCard getClientCard(
             @PathVariable Long cardId
     ) {
-        return null;
+        return clientCardService.getClientCard(cardId);
     }
 }

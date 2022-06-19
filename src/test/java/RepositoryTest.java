@@ -44,22 +44,7 @@ class TestResource extends Resource {
 class TestRepository extends CSVRepository<TestResource> {
 
     public TestRepository() {
-        filePath =  "test_file.csv";
-
-        try {
-            readDataFromTable();
-        } catch (FileNotFoundException exc) {
-            try {
-                System.out.println("CSV file not found, creating a new one...");
-                saveDataToFile();
-            } catch (Exception internalExc) {
-                System.out.println("An error occurred while initializing a file:");
-                internalExc.printStackTrace();
-            }
-        } catch (Exception exc) {
-            System.out.println("An error occurred while reading:");
-            exc.printStackTrace();
-        }
+        super("test_file.csv");
     }
 
 

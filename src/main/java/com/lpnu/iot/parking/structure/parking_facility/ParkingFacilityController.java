@@ -18,26 +18,26 @@ public class ParkingFacilityController {
 
 
     @GetMapping(path =
-    "")
+    "shops/{shopId}/parking_facilities")
     public Map<Long, ParkingFacility> getParkingFacilities(
             @PathVariable Long shopId
     ) {
-        return null;
+        return parkingFacilityService.getParkingFacilities(shopId);
     }
 
     @GetMapping(path =
-    "")
+    "parking_facilities/{facilityId}")
     public ParkingFacility getParkingFacility(
         @PathVariable Long facilityId
     ) {
-        return null;
+        return parkingFacilityService.getParkingFacility(facilityId);
     }
 
     @PostMapping(path =
-    "")
+    "shops/{shopId}/parking_facilities/add")
     public ParkingFacility addParkingFacility(
         @PathVariable Long shopId
     ) {
-        return null;
+        return parkingFacilityService.addParkingFacility(shopId);
     }
 }

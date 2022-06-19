@@ -10,4 +10,8 @@ public class ParkingSlotRepository extends CSVRepository<ParkingSlot> {
     protected ParkingSlot createNewResource() {
         return new ParkingSlot();
     }
+
+    public ParkingSlotRepository() {
+        super("data/parking_slots.csv");
+    }
 }

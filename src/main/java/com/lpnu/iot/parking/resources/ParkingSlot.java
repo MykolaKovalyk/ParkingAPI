@@ -1,8 +1,15 @@
 package com.lpnu.iot.parking.resources;
 
 import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+
+@AllArgsConstructor
+@NoArgsConstructor
 public class ParkingSlot extends Resource {
+
+    public static final Long FREE_SLOT_TICKET = 0L;
 
     public Long parkingFacilityId;
     public Long activeTicketId;

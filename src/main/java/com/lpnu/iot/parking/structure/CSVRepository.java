@@ -10,6 +10,7 @@ import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public abstract class CSVRepository<Res extends Resource> {
 
@@ -22,6 +23,25 @@ public abstract class CSVRepository<Res extends Resource> {
     protected long idSequence = 0;
 
 
+    public CSVRepository(String filePath) {
+        this.filePath = filePath;
+
+        try {
+            readDataFromTable();
+        } catch (FileNotFoundException exc) {
+            try {
+                System.out.println(this.getClass().toString() + ": CSV file not found, creating a new one...");
+                saveDataToFile();
+            } catch (Exception internalExc) {
+                System.out.println(this.getClass().toString() + "An error occurred while initializing a file:");
+                internalExc.printStackTrace();
+            }
+        } catch (Exception exc) {
+            System.out.println(this.getClass().toString() + "An error occurred while reading:");
+            exc.printStackTrace();
+        }
+    }
+
 
     public Map<Long, Res> findAll() {
         return Collections.unmodifiableMap(dataTable);
@@ -31,14 +51,46 @@ public abstract class CSVRepository<Res extends Resource> {
         return dataTable.get(id);
     }
 
-    public void save(Res newResource) {
+    public Map<Long, Res> findAll(Predicate<Res> predicate) {
+        Map<Long, Res> all =  findAll();
+        Map<Long, Res> returned =  new HashMap<>();
+
+        for (var pair : all.entrySet()) {
+            if(predicate.test(pair.getValue())) {
+                returned.put(pair.getKey(), pair.getValue());
+            }
+        }
+
+        return returned;
+    }
+
+    public Res findAny(Predicate<Res> predicate) {
+        Map<Long, Res> all =  findAll();
+
+        for (var pair : all.entrySet()) {
+            if(predicate.test(pair.getValue())) {
+               return pair.getValue();
+            }
+        }
+
+        return null;
+    }
+
+
+    public Res save(Res newResource) {
         idSequence++;
         newResource.id = idSequence;
         dataTable.put(idSequence, newResource);
+
+        return newResource;
     }
 
-    public void replace(Long idToReplace, Res newResource) {
-        dataTable.replace(idToReplace, newResource);
+    public Res replace(Long idToReplace, Res newResource) {
+        return dataTable.replace(idToReplace, newResource);
+    }
+
+    public Res remove(Long idToRemove) {
+        return dataTable.remove(idToRemove);
     }
 
     public void readDataFromTable() throws FileNotFoundException, IOException, CsvValidationException {

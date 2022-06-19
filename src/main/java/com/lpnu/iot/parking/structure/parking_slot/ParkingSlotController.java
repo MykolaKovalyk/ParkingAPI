@@ -23,16 +23,15 @@ public class ParkingSlotController {
     public Map<Long, ParkingSlot> getParkingSlots(
             @PathVariable Long parkingFacilityId
     ) {
-        return null;
+        return parkingSlotService.getParkingSlots(parkingFacilityId);
     }
 
     @GetMapping(path=
-    "parking_facilities/{parkingFacilityId}/parking_slots/{parkingSlotId}")
+    "parking_slots/{parkingSlotId}")
     public ParkingSlot getParkingSlot(
-            @PathVariable Long parkingFacilityId,
             @PathVariable Long parkingSlotId
     ) {
-        return null;
+        return parkingSlotService.getParkingSlot(parkingSlotId);
     }
 
     @PostMapping(path=
@@ -41,15 +40,18 @@ public class ParkingSlotController {
             @PathVariable Long parkingFacilityId,
             @RequestParam Boolean forDisabled
     ) {
-        return null;
+        return parkingSlotService.addParkingSlot(
+                parkingFacilityId,
+                forDisabled
+        );
     }
 
     @DeleteMapping(path =
     "parking_slots/{parkingSlotId}/remove")
-    public Boolean removeParkingSlot(
+    public ParkingSlot removeParkingSlot(
             @PathVariable Long parkingSlotId
     ) {
-        return null;
+        return parkingSlotService.removeParkingSlot(parkingSlotId);
     }
 
     @PutMapping(path=
@@ -60,14 +62,19 @@ public class ParkingSlotController {
             @RequestParam Boolean forDisabled,
             @RequestParam Long clientId
     ) {
-        return null;
+        return parkingSlotService.takeParkingSlot(
+                parkingFacilityId,
+                carNumber,
+                forDisabled,
+                clientId
+        );
     }
 
     @PutMapping(path=
             "parking_tickets/{ticketId}/free")
-    public Boolean freeParkingSlot(
+    public ParkingSlot freeParkingSlot(
             @PathVariable Long ticketId
     ) {
-        return null;
+        return parkingSlotService.freeParkingSlot(ticketId);
     }
 }

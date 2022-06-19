@@ -1,5 +1,10 @@
 package com.lpnu.iot.parking.resources;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
 public class Client extends Resource {
 
     public String name;

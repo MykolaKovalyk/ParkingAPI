@@ -20,7 +20,7 @@ public class ParkingTicketController {
     public Map<Long, ParkingTicket> getTickets(
             @PathVariable Long facilityId
     ) {
-        return null;
+        return parkingTicketService.getTickets(facilityId);
     }
 
 
@@ -29,7 +29,7 @@ public class ParkingTicketController {
     public ParkingTicket getTicket(
             @PathVariable Long ticketId
     ) {
-        return null;
+        return parkingTicketService.getTicket(ticketId);
     }
 
 }

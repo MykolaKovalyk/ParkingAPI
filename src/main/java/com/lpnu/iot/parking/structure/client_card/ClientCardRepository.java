@@ -10,4 +10,8 @@ public class ClientCardRepository extends CSVRepository<ClientCard> {
     protected ClientCard createNewResource() {
         return new ClientCard();
     }
+
+    public ClientCardRepository() {
+        super("data/client_cards.csv");
+    }
 }

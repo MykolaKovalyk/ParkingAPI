@@ -10,4 +10,8 @@ public class ParkingTicketRepository extends CSVRepository<ParkingTicket> {
     protected ParkingTicket createNewResource() {
         return new ParkingTicket();
     }
+
+    public ParkingTicketRepository() {
+        super("data/parking_tickets.csv");
+    }
 }

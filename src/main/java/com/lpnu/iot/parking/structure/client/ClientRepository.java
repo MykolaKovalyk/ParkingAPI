@@ -10,4 +10,8 @@ public class ClientRepository extends CSVRepository<Client> {
     protected Client createNewResource() {
         return new Client();
     }
+
+    public ClientRepository() {
+        super("data/clients.csv");
+    }
 }

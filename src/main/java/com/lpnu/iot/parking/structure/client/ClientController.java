@@ -15,7 +15,7 @@ public class ClientController {
     public Client getClient(
             @PathVariable Long clientId
     ) {
-        return null;
+        return clientService.getClient(clientId);
     }
 
     @PostMapping(path =
@@ -26,6 +26,11 @@ public class ClientController {
             @RequestParam String email,
             @RequestParam String phoneNumber
     ) {
-        return null;
+        return clientService.addClient(
+                shopId,
+                name,
+                email,
+                phoneNumber
+        );
     }
 }

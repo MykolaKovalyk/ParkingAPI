@@ -1,8 +1,13 @@
 package com.lpnu.iot.parking.resources;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.text.ParseException;
 import java.util.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClientCard extends Resource {
 
     public String cardName;
