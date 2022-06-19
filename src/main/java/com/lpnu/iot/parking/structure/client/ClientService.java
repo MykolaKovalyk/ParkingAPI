@@ -2,24 +2,19 @@ package com.lpnu.iot.parking.structure.client;
 
 import com.lpnu.iot.parking.resources.Client;
 import com.lpnu.iot.parking.resources.ClientCard;
-import com.lpnu.iot.parking.structure.client_card.ClientCardRepository;
+import com.lpnu.iot.parking.structure.clientcard.ClientCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.time.Instant;
 import java.util.Date;
 
 @Service
 public class ClientService {
 
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
-    ClientCardRepository clientCardRepository;
+    private ClientCardRepository clientCardRepository;
 
 
     public Client getClient(
@@ -50,8 +45,8 @@ public class ClientService {
         var newClient = new Client(name, email, phoneNumber, -1L);
 
 
-        newClientCard.ownerClientId = clientRepository.save(newClient).id;
-        newClient.cardId = clientCardRepository.save(newClientCard).id;
+        newClientCard.setOwnerClientId(clientRepository.save(newClient).getId());
+        newClient.setCardId(clientCardRepository.save(newClientCard).getId());
 
         return newClient;
     }

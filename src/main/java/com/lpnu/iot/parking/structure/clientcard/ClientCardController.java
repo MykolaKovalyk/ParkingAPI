@@ -1,4 +1,4 @@
-package com.lpnu.iot.parking.structure.client_card;
+package com.lpnu.iot.parking.structure.clientcard;
 
 import com.lpnu.iot.parking.resources.ClientCard;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClientCardController {
 
     @Autowired
-    ClientCardService clientCardService;
+    private ClientCardService clientCardService;
 
-    @GetMapping(path=
-    "client_cards/{cardId}")
+    @GetMapping(path =
+    "client-cards/{cardId}")
     public ClientCard getClientCard(
             @PathVariable Long cardId
     ) {

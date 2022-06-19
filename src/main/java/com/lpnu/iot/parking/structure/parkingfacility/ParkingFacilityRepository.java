@@ -1,4 +1,4 @@
-package com.lpnu.iot.parking.structure.parking_facility;
+package com.lpnu.iot.parking.structure.parkingfacility;
 
 import com.lpnu.iot.parking.resources.ParkingFacility;
 import com.lpnu.iot.parking.structure.CSVRepository;

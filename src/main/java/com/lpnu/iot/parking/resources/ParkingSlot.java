@@ -1,24 +1,27 @@
 package com.lpnu.iot.parking.resources;
 
-import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class ParkingSlot extends Resource {
 
     public static final Long FREE_SLOT_TICKET = 0L;
 
-    public Long parkingFacilityId;
-    public Long activeTicketId;
-    public Boolean isForDisabled;
+    private Long parkingFacilityId;
+    private Long activeTicketId;
+    private Boolean isForDisabled;
 
     @Override
-    public String[] toListOfStrings() {
+    public String[] toArrayOfStrings() {
         return new String[] {
-                Long.toString(id),
+                Long.toString(getId()),
                 Long.toString(parkingFacilityId),
                 Long.toString(activeTicketId),
                 Boolean.toString(isForDisabled)
@@ -26,8 +29,8 @@ public class ParkingSlot extends Resource {
     }
 
     @Override
-    public void fromListOfStrings(String[] csv) {
-        id =  Long.parseLong(csv[0]);
+    public void fromArrayOfStrings(String[] csv) {
+        setId(Long.parseLong(csv[0]));
         parkingFacilityId =  Long.parseLong(csv[1]);
         activeTicketId = Long.parseLong(csv[2]);
         isForDisabled = Boolean.parseBoolean(csv[3]);

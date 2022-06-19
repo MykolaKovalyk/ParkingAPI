@@ -1,21 +1,25 @@
 package com.lpnu.iot.parking.resources;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Client extends Resource {
 
-    public String name;
-    public String phoneNumber;
-    public String email;
-    public Long cardId;
+    private String name;
+    private String phoneNumber;
+    private String email;
+    private Long cardId;
 
     @Override
-    public String[] toListOfStrings() {
+    public String[] toArrayOfStrings() {
         return new String[] {
-                Long.toString(id),
+                Long.toString(getId()),
                 name,
                 phoneNumber,
                 email,
@@ -24,8 +28,8 @@ public class Client extends Resource {
     }
 
     @Override
-    public void fromListOfStrings(String[] csv) {
-        id = Long.parseLong(csv[0]);
+    public void fromArrayOfStrings(String[] csv) {
+         setId(Long.parseLong(csv[0]));
         name = csv[1];
         phoneNumber = csv[2];
         email = csv[3];

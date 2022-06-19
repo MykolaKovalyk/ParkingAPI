@@ -1,46 +1,49 @@
 package com.lpnu.iot.parking.resources;
 
-
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.text.ParseException;
 import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class ParkingTicket extends Resource {
 
-    public Long ownerClientId;
-    public Long parkingFacilityId;
-    public Date timeOfActivation;
-    public Date timeOfDeactivation;
-    public String carNumber;
-    public Long parkingSlotId;
+    private Long ownerClientId;
+    private Long parkingFacilityId;
+    private Date timeOfActivation;
+    private Date timeOfDeactivation;
+    private String carNumber;
+    private Long parkingSlotId;
 
     @Override
-    public String[] toListOfStrings() {
+    public String[] toArrayOfStrings() {
         return new String[] {
-                Long.toString(id),
+                Long.toString(getId()),
                 Long.toString(ownerClientId),
                 Long.toString(parkingFacilityId),
-                dateFormat.format(timeOfActivation),
-                dateFormat.format(timeOfDeactivation),
+                DATE_FORMAT.format(timeOfActivation),
+                DATE_FORMAT.format(timeOfDeactivation),
                 carNumber,
                 Long.toString(parkingSlotId)
         };
     }
 
     @Override
-    public void fromListOfStrings(String[] csv) {
-        id =  Long.parseLong(csv[0]);
+    public void fromArrayOfStrings(String[] csv) {
+        setId(Long.parseLong(csv[0]));
         ownerClientId = Long.parseLong(csv[1]);
         parkingFacilityId =  Long.parseLong(csv[2]);
 
         try {
-            timeOfActivation = dateFormat.parse(csv[3]);
-            timeOfDeactivation = dateFormat.parse(csv[4]);
-        } catch(ParseException e) {
+            timeOfActivation = DATE_FORMAT.parse(csv[3]);
+            timeOfDeactivation = DATE_FORMAT.parse(csv[4]);
+        } catch (ParseException e) {
             System.out.println("Parsing datetime failed!");
         }
 

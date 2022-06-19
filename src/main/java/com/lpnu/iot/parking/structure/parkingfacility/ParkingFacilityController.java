@@ -1,4 +1,4 @@
-package com.lpnu.iot.parking.structure.parking_facility;
+package com.lpnu.iot.parking.structure.parkingfacility;
 
 import com.lpnu.iot.parking.resources.ParkingFacility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +13,12 @@ import java.util.Map;
 public class ParkingFacilityController {
 
     @Autowired
-    ParkingFacilityService parkingFacilityService;
+    private ParkingFacilityService parkingFacilityService;
 
 
 
     @GetMapping(path =
-    "shops/{shopId}/parking_facilities")
+    "shops/{shopId}/parking-facilities")
     public Map<Long, ParkingFacility> getParkingFacilities(
             @PathVariable Long shopId
     ) {
@@ -26,7 +26,7 @@ public class ParkingFacilityController {
     }
 
     @GetMapping(path =
-    "parking_facilities/{facilityId}")
+    "parking-facilities/{facilityId}")
     public ParkingFacility getParkingFacility(
         @PathVariable Long facilityId
     ) {
@@ -34,7 +34,7 @@ public class ParkingFacilityController {
     }
 
     @PostMapping(path =
-    "shops/{shopId}/parking_facilities/add")
+    "shops/{shopId}/parking-facilities/add")
     public ParkingFacility addParkingFacility(
         @PathVariable Long shopId
     ) {

@@ -1,44 +1,48 @@
-package com.lpnu.iot.parking.structure.parking_slot;
+package com.lpnu.iot.parking.structure.parkingslot;
 
-import com.lpnu.iot.parking.resources.Client;
 import com.lpnu.iot.parking.resources.ParkingSlot;
 import com.lpnu.iot.parking.resources.ParkingTicket;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashMap;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
+
+
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 public class ParkingSlotController {
 
     @Autowired
-    ParkingSlotService parkingSlotService;
+    private ParkingSlotService parkingSlotService;
 
-    @GetMapping(path=
-    "parking_facilities/{parkingFacilityId}/parking_slots")
+    @GetMapping(path =
+    "parking-facilities/{parkingFacilityId}/parking-slots")
     public Map<Long, ParkingSlot> getParkingSlots(
             @PathVariable Long parkingFacilityId
     ) {
         return parkingSlotService.getParkingSlots(parkingFacilityId);
     }
 
-    @GetMapping(path=
-    "parking_slots/{parkingSlotId}")
+    @GetMapping(path =
+    "parking-slots/{parkingSlotId}")
     public ParkingSlot getParkingSlot(
             @PathVariable Long parkingSlotId
     ) {
         return parkingSlotService.getParkingSlot(parkingSlotId);
     }
 
-    @PostMapping(path=
-    "parking_facilities/{parkingFacilityId}/parking_slots/add")
+    @PostMapping(path =
+    "parking-facilities/{parkingFacilityId}/parking-slots/add")
     public ParkingSlot addParkingSlot(
             @PathVariable Long parkingFacilityId,
-            @RequestParam Boolean forDisabled
+            @RequestParam(required = false) Boolean forDisabled
     ) {
         return parkingSlotService.addParkingSlot(
                 parkingFacilityId,
@@ -47,20 +51,20 @@ public class ParkingSlotController {
     }
 
     @DeleteMapping(path =
-    "parking_slots/{parkingSlotId}/remove")
+    "parking-slots/{parkingSlotId}/remove")
     public ParkingSlot removeParkingSlot(
             @PathVariable Long parkingSlotId
     ) {
         return parkingSlotService.removeParkingSlot(parkingSlotId);
     }
 
-    @PutMapping(path=
-    "parking_facilities/{parkingFacilityId}/take_slot/{carNumber}")
+    @PutMapping(path =
+    "parking-facilities/{parkingFacilityId}/take-slot/{carNumber}")
     public ParkingTicket takeParkingSlot(
             @PathVariable Long parkingFacilityId,
             @PathVariable String carNumber,
-            @RequestParam Boolean forDisabled,
-            @RequestParam Long clientId
+            @RequestParam(required = false) Boolean forDisabled,
+            @RequestParam(required = false) Long clientId
     ) {
         return parkingSlotService.takeParkingSlot(
                 parkingFacilityId,
@@ -70,8 +74,8 @@ public class ParkingSlotController {
         );
     }
 
-    @PutMapping(path=
-            "parking_tickets/{ticketId}/free")
+    @PutMapping(path =
+            "parking-tickets/{ticketId}/free")
     public ParkingSlot freeParkingSlot(
             @PathVariable Long ticketId
     ) {

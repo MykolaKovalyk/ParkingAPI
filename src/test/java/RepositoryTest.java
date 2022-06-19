@@ -3,16 +3,8 @@ import com.lpnu.iot.parking.structure.CSVRepository;
 import junit.framework.TestCase;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import javax.management.OperationsException;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,9 +15,9 @@ class TestResource extends Resource {
     public boolean someBoolean;
 
     @Override
-    public String[] toListOfStrings() {
+    public String[] toArrayOfStrings() {
         return new String[] {
-                Long.toString(id),
+                Long.toString(getId()),
                 Integer.toString(someInt),
                 someString,
                 Boolean.toString(someBoolean)
@@ -33,8 +25,8 @@ class TestResource extends Resource {
     }
 
     @Override
-    public void fromListOfStrings(String[] csv) {
-        id =  Long.parseLong(csv[0]);
+    public void fromArrayOfStrings(String[] csv) {
+        setId(Long.parseLong(csv[0]));
         someInt = Integer.parseInt(csv[1]);
         someString =  csv[2];
         someBoolean = Boolean.parseBoolean(csv[3]);
@@ -75,7 +67,7 @@ public class RepositoryTest extends TestCase {
 
         repository.saveDataToFile();
 
-        repository.readDataFromTable();
+        repository.readDataFromFile();
 
        var found =  repository.findAll();
 

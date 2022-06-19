@@ -1,25 +1,29 @@
 package com.lpnu.iot.parking.resources;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class ParkingFacility extends Resource {
 
-    public Long belongingShopId;
+    private Long belongingShopId;
 
     @Override
-    public String[] toListOfStrings() {
+    public String[] toArrayOfStrings() {
         return new String[] {
-                Long.toString(id),
+                Long.toString(getId()),
                 Long.toString(belongingShopId)
         };
     }
 
     @Override
-    public void fromListOfStrings(String[] csv) {
-        id = Long.parseLong(csv[0]);
+    public void fromArrayOfStrings(String[] csv) {
+        setId(Long.parseLong(csv[0]));
         belongingShopId = Long.parseLong(csv[1]);
     }
 }

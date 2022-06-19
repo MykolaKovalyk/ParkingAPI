@@ -1,4 +1,4 @@
-package com.lpnu.iot.parking.structure.client_card;
+package com.lpnu.iot.parking.structure.clientcard;
 
 import com.lpnu.iot.parking.resources.ClientCard;
 import com.lpnu.iot.parking.structure.CSVRepository;

@@ -1,4 +1,4 @@
-package com.lpnu.iot.parking.structure.parking_ticket;
+package com.lpnu.iot.parking.structure.parkingticket;
 
 import com.lpnu.iot.parking.resources.ParkingTicket;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,11 @@ import java.util.Map;
 public class ParkingTicketController {
 
     @Autowired
-    ParkingTicketService parkingTicketService;
+    private ParkingTicketService parkingTicketService;
 
 
-    @GetMapping(path=
-    "parking_facilities/{facilityId}/parking_tickets")
+    @GetMapping(path =
+    "parking-facilities/{facilityId}/parking-tickets")
     public Map<Long, ParkingTicket> getTickets(
             @PathVariable Long facilityId
     ) {
@@ -24,8 +24,8 @@ public class ParkingTicketController {
     }
 
 
-    @GetMapping(path=
-    "parking_tickets/{ticketId}")
+    @GetMapping(path =
+    "parking-tickets/{ticketId}")
     public ParkingTicket getTicket(
             @PathVariable Long ticketId
     ) {

@@ -1,9 +1,8 @@
-package com.lpnu.iot.parking.structure.parking_slot;
+package com.lpnu.iot.parking.structure.parkingslot;
 
 import com.lpnu.iot.parking.resources.ParkingSlot;
 import com.lpnu.iot.parking.resources.ParkingTicket;
-import com.lpnu.iot.parking.structure.parking_facility.ParkingFacilityRepository;
-import com.lpnu.iot.parking.structure.parking_ticket.ParkingTicketRepository;
+import com.lpnu.iot.parking.structure.parkingticket.ParkingTicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +13,17 @@ import java.util.Map;
 public class ParkingSlotService {
 
     @Autowired
-    ParkingSlotRepository parkingSlotRepository;
+    private ParkingSlotRepository parkingSlotRepository;
 
     @Autowired
-    ParkingTicketRepository parkingTicketRepository;
+    private ParkingTicketRepository parkingTicketRepository;
 
 
 
     public Map<Long, ParkingSlot> getParkingSlots(Long parkingFacilityId) {
 
         return parkingSlotRepository.findAll(parkingSlot ->
-                parkingSlot.parkingFacilityId.equals(parkingFacilityId));
+                parkingSlot.getParkingFacilityId().equals(parkingFacilityId));
     }
 
     public ParkingSlot getParkingSlot(
@@ -54,9 +53,9 @@ public class ParkingSlotService {
         Boolean isForDisabled = forDisabled != null ? forDisabled : false;
         ParkingSlot eligibleParkingSlot =
                 parkingSlotRepository.findAny(parkingSlot ->
-                parkingSlot.parkingFacilityId.equals(parkingFacilityId)
-                && parkingSlot.activeTicketId.equals(ParkingSlot.FREE_SLOT_TICKET)
-                && parkingSlot.isForDisabled.equals(isForDisabled));
+                parkingSlot.getParkingFacilityId().equals(parkingFacilityId)
+                && parkingSlot.getActiveTicketId().equals(ParkingSlot.FREE_SLOT_TICKET)
+                && parkingSlot.getIsForDisabled().equals(isForDisabled));
 
         var newTicket = parkingTicketRepository.save(new ParkingTicket(
                 clientId,
@@ -64,9 +63,9 @@ public class ParkingSlotService {
                 new Date(),
                 null,
                 carNumber,
-                eligibleParkingSlot.id));
+                eligibleParkingSlot.getId()));
 
-        eligibleParkingSlot.activeTicketId = newTicket.id;
+        eligibleParkingSlot.setActiveTicketId(newTicket.getId());
 
         return newTicket;
     }
@@ -74,10 +73,10 @@ public class ParkingSlotService {
     public ParkingSlot freeParkingSlot(Long ticketId) {
 
         var ticketToDeactivate =  parkingTicketRepository.findById(ticketId);
-        ticketToDeactivate.timeOfDeactivation = new Date();
+        ticketToDeactivate.setTimeOfDeactivation(new Date());
 
-        var slotToFree =  parkingSlotRepository.findById(ticketToDeactivate.parkingSlotId);
-        slotToFree.activeTicketId = ParkingSlot.FREE_SLOT_TICKET;
+        var slotToFree =  parkingSlotRepository.findById(ticketToDeactivate.getParkingSlotId());
+        slotToFree.setActiveTicketId(ParkingSlot.FREE_SLOT_TICKET);
 
         return slotToFree;
     }
