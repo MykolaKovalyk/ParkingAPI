@@ -37,7 +37,7 @@ public class ParkingSlotService {
             Boolean forDisabled
     )  throws Exception {
 
-        var added = parkingSlotRepository.save(
+        var added = parkingSlotRepository.add(
                 new ParkingSlot(
                         parkingFacilityId,
                         ParkingSlot.FREE_SLOT_TICKET,
@@ -72,7 +72,7 @@ public class ParkingSlotService {
                 && parkingSlot.getActiveTicketId().equals(ParkingSlot.FREE_SLOT_TICKET)
                 && parkingSlot.getIsForDisabled().equals(isForDisabled));
 
-        var newTicket = parkingTicketRepository.save(new ParkingTicket(
+        var newTicket = parkingTicketRepository.add(new ParkingTicket(
                 clientId,
                 parkingFacilityId,
                 new Date(),

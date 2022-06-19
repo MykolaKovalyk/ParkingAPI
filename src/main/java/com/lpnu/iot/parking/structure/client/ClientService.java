@@ -49,8 +49,8 @@ public class ClientService {
                 clientCardRepository.getIdSequence() + 1);
 
 
-        clientRepository.save(newClient);
-        clientCardRepository.save(newClientCard);
+        clientRepository.add(newClient);
+        clientCardRepository.add(newClientCard);
 
         clientRepository.writeDataToFile();
         clientCardRepository.writeDataToFile();

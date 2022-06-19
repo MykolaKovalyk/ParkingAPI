@@ -23,7 +23,7 @@ public class ParkingFacilityService {
     }
 
     public ParkingFacility addParkingFacility(Long shopId)  throws Exception {
-        var added = parkingFacilityRepository.save(new ParkingFacility(shopId));
+        var added = parkingFacilityRepository.add(new ParkingFacility(shopId));
 
         parkingFacilityRepository.writeDataToFile();
 

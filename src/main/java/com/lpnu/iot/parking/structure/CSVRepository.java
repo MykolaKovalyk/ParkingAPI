@@ -96,7 +96,7 @@ public abstract class CSVRepository<Res extends Resource> {
         return null;
     }
 
-    public Res save(Res newResource) {
+    public Res add(Res newResource) {
         idSequence++;
         newResource.setId(idSequence);
         dataTable.put(idSequence, newResource);
@@ -106,6 +106,10 @@ public abstract class CSVRepository<Res extends Resource> {
 
     public Res replace(Long idToReplace, Res newResource) {
         return dataTable.replace(idToReplace, newResource);
+    }
+
+    public Res addOrGetIfPresent(Long id, Res newResource) {
+        return dataTable.putIfAbsent(id, newResource);
     }
 
     public Res remove(Long idToRemove) {
