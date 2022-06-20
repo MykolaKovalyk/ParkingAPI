@@ -184,5 +184,5 @@ public abstract class CSVRepository<Res extends Resource> {
         }
     }
 
-    protected  abstract Res createNewResource();
+    protected abstract Res createNewResource();
 }
