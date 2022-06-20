@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
@@ -36,8 +37,9 @@ public class ParkingFacilityController {
     @PostMapping(path =
     "shops/{shopId}/parking-facilities/add")
     public ParkingFacility addParkingFacility(
-        @PathVariable Long shopId
+        @PathVariable Long shopId,
+        @RequestParam String address
     )  throws Exception {
-        return parkingFacilityService.addParkingFacility(shopId);
+        return parkingFacilityService.addParkingFacility(shopId, address);
     }
 }

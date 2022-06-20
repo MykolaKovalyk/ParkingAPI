@@ -22,8 +22,8 @@ public class ParkingFacilityService {
         return parkingFacilityRepository.findById(facilityId);
     }
 
-    public ParkingFacility addParkingFacility(Long shopId)  throws Exception {
-        var added = parkingFacilityRepository.add(new ParkingFacility(shopId));
+    public ParkingFacility addParkingFacility(Long shopId, String address)  throws Exception {
+        var added = parkingFacilityRepository.add(new ParkingFacility(shopId, address));
 
         parkingFacilityRepository.writeDataToFile();
 

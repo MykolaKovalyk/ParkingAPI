@@ -32,7 +32,7 @@ To run the app, you need Java 17 and Maven. Open command line in a directory whe
 
 
 4. `GET`:`http://{ip}:{port}/parking-facilities/{facilityId}` - Get parking facility by id;
-5. `POST`:`http://{ip}:{port}/shops/{shopId}/parking-facilities/add` - Add a new parking facility to the shop;
+5. `POST`:`http://{ip}:{port}/shops/{shopId}/parking-facilities/add?address={required}` - Add a new parking facility to the shop;
 
 
 6. `GET`:`http://{ip}:{port}/parking-facilities/{parkingFacilityId}/parking-slots` - Get all parking slots of the parking facility;

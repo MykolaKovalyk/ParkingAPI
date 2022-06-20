@@ -12,12 +12,14 @@ import lombok.Setter;
 public class ParkingFacility extends Resource {
 
     private Long belongingShopId;
+    private String address;
 
     @Override
     public String[] toArrayOfStrings() {
         return new String[] {
                 Long.toString(getId()),
-                Long.toString(belongingShopId)
+                Long.toString(belongingShopId),
+                address
         };
     }
 
@@ -25,7 +27,8 @@ public class ParkingFacility extends Resource {
     public String[] fieldNamesToStringArray() {
         return new String[] {
                 "id",
-                "belongingShopId"
+                "belongingShopId",
+                "address"
         };
     }
 
@@ -33,5 +36,6 @@ public class ParkingFacility extends Resource {
     public void fromArrayOfStrings(String[] csv) {
         setId(Long.parseLong(csv[0]));
         belongingShopId = Long.parseLong(csv[1]);
+        address = csv[2];
     }
 }
