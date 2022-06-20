@@ -32,6 +32,9 @@ public abstract class CSVRepository<Res extends Resource> {
     @Getter
     private long idSequence = 0;
 
+    private static final SimpleDateFormat FILE_NAME_DATE_FORMAT = new SimpleDateFormat("yyyy_MM_dd");
+    private static final SimpleDateFormat MONTH_DATE_FORMAT = new SimpleDateFormat("yyyy_MMM");
+
 
 
     public CSVRepository(String filePath) {
@@ -118,10 +121,6 @@ public abstract class CSVRepository<Res extends Resource> {
 
     public void readDataFromFile() throws IOException, CsvValidationException {
 
-
-        final SimpleDateFormat FILE_NAME_DATE_FORMAT = new SimpleDateFormat("yyyy_MM_dd");
-        final SimpleDateFormat MONTH_DATE_FORMAT = new SimpleDateFormat("yyyy_MMM");
-
         File tableRootDirectory = Paths.get(
                 resourceRootPath,
                 MONTH_DATE_FORMAT.format(new Date())
@@ -162,9 +161,6 @@ public abstract class CSVRepository<Res extends Resource> {
 
     public void writeDataToFile() throws IOException {
 
-        final SimpleDateFormat FILE_NAME_DATE_FORMAT = new SimpleDateFormat("yyyy_MM_dd");
-        final SimpleDateFormat MONTH_DATE_FORMAT = new SimpleDateFormat("yyyy_MMM");
-
         var currentDate = new Date();
         File tableFile = Paths.get(
                 resourceRootPath,
@@ -180,7 +176,7 @@ public abstract class CSVRepository<Res extends Resource> {
         try (FileWriter fileWriter = new FileWriter(tableFile);
              CSVWriter writer = new CSVWriter(fileWriter)) {
 
-            writer.writeNext(createNewResource().fieldNamesToStringArray());
+            writer.writeNext(createNewResource().fieldNamesToStringArray(), false);
 
             for (Map.Entry<Long, Res> entry : dataTable.entrySet()) {
                 writer.writeNext(entry.getValue().toArrayOfStrings(), false);

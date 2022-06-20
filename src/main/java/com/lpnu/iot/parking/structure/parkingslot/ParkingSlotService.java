@@ -2,6 +2,7 @@ package com.lpnu.iot.parking.structure.parkingslot;
 
 import com.lpnu.iot.parking.resources.ParkingSlot;
 import com.lpnu.iot.parking.resources.ParkingTicket;
+import com.lpnu.iot.parking.structure.parkingfacility.ParkingFacilityRepository;
 import com.lpnu.iot.parking.structure.parkingticket.ParkingTicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class ParkingSlotService {
 
     @Autowired
     private ParkingTicketRepository parkingTicketRepository;
+
+    @Autowired
+    private ParkingFacilityRepository parkingFacilityRepository;
 
 
 
@@ -37,13 +41,22 @@ public class ParkingSlotService {
             Boolean forDisabled
     )  throws Exception {
 
+        var facilityToAddSlotsTo = parkingFacilityRepository.findById(parkingFacilityId);
+
+        if (facilityToAddSlotsTo == null) {
+            throw new IllegalArgumentException("Non-existent parking facility id");
+        }
+
         var added = parkingSlotRepository.add(
                 new ParkingSlot(
                         parkingFacilityId,
                         ParkingSlot.FREE_SLOT_TICKET,
                         forDisabled));
 
+        facilityToAddSlotsTo.setCountOfParkingSlots(
+                facilityToAddSlotsTo.getCountOfParkingSlots() + 1);
 
+        parkingFacilityRepository.writeDataToFile();
         parkingSlotRepository.writeDataToFile();
 
         return added;
@@ -52,8 +65,25 @@ public class ParkingSlotService {
     public ParkingSlot removeParkingSlot(Long parkingSlotId)  throws Exception {
         var removed = parkingSlotRepository.remove(parkingSlotId);
 
+        if (removed == null) {
+            return null;
+        }
+
+        var facilityToRemoveFrom = parkingFacilityRepository
+                .findById(
+                        removed.getParkingFacilityId()
+                );
+
+        if (facilityToRemoveFrom == null) {
+            throw new IllegalArgumentException("Non-existent parking facility id");
+        }
+
+        facilityToRemoveFrom.setCountOfParkingSlots(
+                facilityToRemoveFrom.getCountOfParkingSlots() - 1
+        );
+
+        parkingFacilityRepository.writeDataToFile();
         parkingSlotRepository.writeDataToFile();
-        parkingTicketRepository.writeDataToFile();
 
         return removed;
     }
@@ -71,6 +101,10 @@ public class ParkingSlotService {
                 parkingSlot.getParkingFacilityId().equals(parkingFacilityId)
                 && parkingSlot.getActiveTicketId().equals(ParkingSlot.FREE_SLOT_TICKET)
                 && parkingSlot.getIsForDisabled().equals(isForDisabled));
+
+        if (eligibleParkingSlot == null) {
+            return null;
+        }
 
         var newTicket = parkingTicketRepository.add(new ParkingTicket(
                 clientId,

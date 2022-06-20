@@ -13,13 +13,15 @@ public class ParkingFacility extends Resource {
 
     private Long belongingShopId;
     private String address;
+    private Integer countOfParkingSlots;
 
     @Override
     public String[] toArrayOfStrings() {
         return new String[] {
                 Long.toString(getId()),
                 Long.toString(belongingShopId),
-                address
+                address,
+                Integer.toString(countOfParkingSlots)
         };
     }
 
@@ -28,7 +30,8 @@ public class ParkingFacility extends Resource {
         return new String[] {
                 "id",
                 "belongingShopId",
-                "address"
+                "address",
+                "countOfParkingSlots"
         };
     }
 
@@ -37,5 +40,6 @@ public class ParkingFacility extends Resource {
         setId(Long.parseLong(csv[0]));
         belongingShopId = Long.parseLong(csv[1]);
         address = csv[2];
+        countOfParkingSlots = Integer.parseInt(csv[3]);
     }
 }
