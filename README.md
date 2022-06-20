@@ -20,7 +20,7 @@ The other parts of the project use and adopt the functionality of CSVReader. RES
 
 # How to run
 
-To run the app, you need Java 17 and Maven. Open command line in a directory where the project is stored, then run `mvn clean package`. After that, go to the newly generated `target` directory, and run `java -jar ParkingAPI-1.0-SNAPSHOT.jar`. The server should start in the command line window. You can now access the server from browser.
+To run the app, you need Java 17 and Apache Maven 3.8.5 installed and configured on your machine. Open command line in a directory where the project is stored, then run `mvn clean package` from it. After that, run `java -jar target/ParkingAPI-1.0-SNAPSHOT.jar`. The server should start in the command line window. You can now access the server from browser.
 
 # Available Requests
 
@@ -46,4 +46,4 @@ To run the app, you need Java 17 and Maven. Open command line in a directory whe
 12. `GET`:`http://{ip}:{port}/parking-facilities/{facilityId}/parking-tickets` - Get all parking tickets of this parking facility;
 13. `GET`:`http://{ip}:{port}/parking-tickets/{ticketId}` -  Get parking ticket by its id;
 
-To test the program, it is suggested to use the combination `5`-`8`(x5)-`2` and then try and take the parking slot using `10`. Then you can check if the received ticket was stored using `12` and `13`. After that, try and free the slot using `11`.
+To test the program, use the request sequence of `5`-`8`(x5)-`2` and then try and take the parking slot using `10`. Then you can check if the received ticket was stored using `12` and `13`. After that, try and free the slot using `11`. You can also try using `10` with clientId - for that, first create a new client by using `2`, and then use the returned client id in `10`. 
