@@ -19,8 +19,8 @@ public class ParkingSlot extends Resource {
     private Boolean isForDisabled;
 
     @Override
-    public String[] toArrayOfStrings() {
-        return new String[] {
+    public String[] getFieldValues() {
+        return new String[]{
                 Long.toString(getId()),
                 Long.toString(parkingFacilityId),
                 Long.toString(activeTicketId),
@@ -29,8 +29,8 @@ public class ParkingSlot extends Resource {
     }
 
     @Override
-    public String[] fieldNamesToStringArray() {
-        return new String[] {
+    public String[] getFieldNames() {
+        return new String[]{
                 "id",
                 "parkingFacilityId",
                 "activeTicketId",
@@ -39,9 +39,9 @@ public class ParkingSlot extends Resource {
     }
 
     @Override
-    public void fromArrayOfStrings(String[] csv) {
+    public void setFieldValues(String[] csv) {
         setId(Long.parseLong(csv[0]));
-        parkingFacilityId =  Long.parseLong(csv[1]);
+        parkingFacilityId = Long.parseLong(csv[1]);
         activeTicketId = Long.parseLong(csv[2]);
         isForDisabled = Boolean.parseBoolean(csv[3]);
     }

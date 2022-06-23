@@ -11,16 +11,14 @@ import java.util.Date;
 public class ParkingTicketRepository extends CSVRepository<ParkingTicket> {
 
     public static final SimpleDateFormat FILE_NAME_DATE_FORMAT = new SimpleDateFormat("yyyy_MM_dd");
-
     private Date fileCreationDate;
 
+    public ParkingTicketRepository() {
+        super("data/parking_tickets");
+    }
 
     @Override
     protected ParkingTicket createNewResource() {
         return new ParkingTicket();
-    }
-
-    public ParkingTicketRepository() {
-        super("data/parking_tickets");
     }
 }

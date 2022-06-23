@@ -14,7 +14,6 @@ import java.util.Date;
 @Setter
 public class ClientCard extends Resource {
 
-    private String cardName;
     private Long ownerClientId;
     private String cardType;
     private String details;
@@ -24,8 +23,8 @@ public class ClientCard extends Resource {
     private Integer timesUsed;
 
     @Override
-    public String[] toArrayOfStrings() {
-        return new String[] {
+    public String[] getFieldValues() {
+        return new String[]{
                 Long.toString(getId()),
                 Long.toString(ownerClientId),
                 cardType,
@@ -38,8 +37,8 @@ public class ClientCard extends Resource {
     }
 
     @Override
-    public String[] fieldNamesToStringArray() {
-        return new String[] {
+    public String[] getFieldNames() {
+        return new String[]{
                 "id",
                 "cardName",
                 "ownerClientId",
@@ -53,7 +52,7 @@ public class ClientCard extends Resource {
     }
 
     @Override
-    public void fromArrayOfStrings(String[] csv) {
+    public void setFieldValues(String[] csv) {
         setId(Long.parseLong(csv[0]));
         ownerClientId = Long.parseLong(csv[1]);
         cardType = csv[2];

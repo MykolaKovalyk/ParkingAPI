@@ -14,21 +14,13 @@ public class ParkingTicketController {
     @Autowired
     private ParkingTicketService parkingTicketService;
 
-
-    @GetMapping(path =
-    "parking-facilities/{facilityId}/parking-tickets")
-    public Map<Long, ParkingTicket> getTickets(
-            @PathVariable Long facilityId
-    ) {
+    @GetMapping(path = "parking-facilities/{facilityId}/parking-tickets")
+    public Map<Long, ParkingTicket> getTickets(@PathVariable Long facilityId) {
         return parkingTicketService.getTickets(facilityId);
     }
 
-
-    @GetMapping(path =
-    "parking-tickets/{ticketId}")
-    public ParkingTicket getTicket(
-            @PathVariable Long ticketId
-    ) {
+    @GetMapping(path = "parking-tickets/{ticketId}")
+    public ParkingTicket getTicket(@PathVariable Long ticketId) {
         return parkingTicketService.getTicket(ticketId);
     }
 

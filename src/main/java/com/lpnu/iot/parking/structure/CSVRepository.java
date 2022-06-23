@@ -1,6 +1,5 @@
 package com.lpnu.iot.parking.structure;
 
-import com.lpnu.iot.parking.resources.Resource;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -9,10 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -21,20 +19,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public abstract class CSVRepository<Res extends Resource> {
-
-    private Map<Long, Res> dataTable = new HashMap<>();
-
-    @Getter
-    @Setter(AccessLevel.PROTECTED)
-    private String resourceRootPath;
-
-    @Getter
-    private long idSequence = 0;
+public abstract class CSVRepository<Resource extends com.lpnu.iot.parking.resources.Resource> {
 
     private static final SimpleDateFormat FILE_NAME_DATE_FORMAT = new SimpleDateFormat("yyyy_MM_dd");
     private static final SimpleDateFormat MONTH_DATE_FORMAT = new SimpleDateFormat("yyyy_MMM");
-
+    private final Map<Long, Resource> dataTable = new HashMap<>();
+    @Getter
+    @Setter(AccessLevel.PROTECTED)
+    private String resourceRootPath;
+    @Getter
+    private long idSequence = 0;
 
 
     public CSVRepository(String filePath) {
@@ -67,39 +61,36 @@ public abstract class CSVRepository<Res extends Resource> {
     }
 
 
-
-    public Map<Long, Res> findAll() {
+    public Map<Long, Resource> findAll() {
         return Collections.unmodifiableMap(dataTable);
     }
 
-    public Res findById(Long id) {
+    public Resource findById(Long id) {
         return dataTable.get(id);
     }
 
-    public Map<Long, Res> findAll(Predicate<Res> predicate) {
+    public Map<Long, Resource> findAll(Predicate<Resource> predicate) {
 
-        Map<Long, Res> returned =  new HashMap<>();
+        Map<Long, Resource> returned = new HashMap<>();
         for (var pair : dataTable.entrySet()) {
             if (predicate.test(pair.getValue())) {
                 returned.put(pair.getKey(), pair.getValue());
             }
         }
-
         return returned;
     }
 
-    public Res findAny(Predicate<Res> predicate) {
+    public Resource findAny(Predicate<Resource> predicate) {
 
         for (var pair : dataTable.entrySet()) {
             if (predicate.test(pair.getValue())) {
-               return pair.getValue();
+                return pair.getValue();
             }
         }
-
         return null;
     }
 
-    public Res add(Res newResource) {
+    public Resource add(Resource newResource) {
         idSequence++;
         newResource.setId(idSequence);
         dataTable.put(idSequence, newResource);
@@ -107,31 +98,27 @@ public abstract class CSVRepository<Res extends Resource> {
         return newResource;
     }
 
-    public Res replace(Long idToReplace, Res newResource) {
+    public Resource replace(Long idToReplace, Resource newResource) {
         return dataTable.replace(idToReplace, newResource);
     }
 
-    public Res addOrGetIfPresent(Long id, Res newResource) {
+    public Resource addOrGetIfPresent(Long id, Resource newResource) {
         return dataTable.putIfAbsent(id, newResource);
     }
 
-    public Res remove(Long idToRemove) {
+    public Resource remove(Long idToRemove) {
         return dataTable.remove(idToRemove);
     }
 
     public void readDataFromFile() throws IOException, CsvValidationException {
 
-        File tableRootDirectory = Paths.get(
-                resourceRootPath,
-                MONTH_DATE_FORMAT.format(new Date())
-        ).toFile();
+        File tableRootDirectory = Paths.get(resourceRootPath, MONTH_DATE_FORMAT.format(new Date())).toFile();
 
         if (!tableRootDirectory.exists()) {
             throw new IOException("Directory not found!");
         }
 
         File[] tables = tableRootDirectory.listFiles();
-
         if (tables == null) {
             throw new IOException("tableRootDirectory is a file!");
         }
@@ -140,14 +127,12 @@ public abstract class CSVRepository<Res extends Resource> {
         for (var file : tables) {
             try (FileReader fileReader = new FileReader(file);
                  CSVReader reader = new CSVReader(fileReader)) {
-
                 var names = reader.readNext();
 
                 String[] record;
                 while ((record = reader.readNext()) != null) {
-
-                    Res newResource = createNewResource();
-                    newResource.fromArrayOfStrings(record);
+                    Resource newResource = createNewResource();
+                    newResource.setFieldValues(record);
 
                     if (newResource.getId() > idSequence) {
                         idSequence = newResource.getId();
@@ -176,13 +161,13 @@ public abstract class CSVRepository<Res extends Resource> {
         try (FileWriter fileWriter = new FileWriter(tableFile);
              CSVWriter writer = new CSVWriter(fileWriter)) {
 
-            writer.writeNext(createNewResource().fieldNamesToStringArray(), false);
+            writer.writeNext(createNewResource().getFieldNames(), false);
 
-            for (Map.Entry<Long, Res> entry : dataTable.entrySet()) {
-                writer.writeNext(entry.getValue().toArrayOfStrings(), false);
+            for (Map.Entry<Long, Resource> entry : dataTable.entrySet()) {
+                writer.writeNext(entry.getValue().getFieldValues(), false);
             }
         }
     }
 
-    protected abstract Res createNewResource();
+    protected abstract Resource createNewResource();
 }

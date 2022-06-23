@@ -22,8 +22,8 @@ public class ParkingTicket extends Resource {
     private Long parkingSlotId;
 
     @Override
-    public String[] toArrayOfStrings() {
-        return new String[] {
+    public String[] getFieldValues() {
+        return new String[]{
                 Long.toString(getId()),
                 Long.toString(ownerClientId),
                 Long.toString(parkingFacilityId),
@@ -35,8 +35,8 @@ public class ParkingTicket extends Resource {
     }
 
     @Override
-    public String[] fieldNamesToStringArray() {
-        return new String[] {
+    public String[] getFieldNames() {
+        return new String[]{
                 "id",
                 "ownerClientId",
                 "parkingFacilityId",
@@ -47,10 +47,10 @@ public class ParkingTicket extends Resource {
     }
 
     @Override
-    public void fromArrayOfStrings(String[] csv) {
+    public void setFieldValues(String[] csv) {
         setId(Long.parseLong(csv[0]));
         ownerClientId = Long.parseLong(csv[1]);
-        parkingFacilityId =  Long.parseLong(csv[2]);
+        parkingFacilityId = Long.parseLong(csv[2]);
 
         try {
             timeOfActivation = csv[3].length() > 0 ? DATE_FORMAT.parse(csv[3]) : null;
@@ -60,6 +60,6 @@ public class ParkingTicket extends Resource {
         }
 
         carNumber = csv[5];
-        parkingSlotId =  Long.parseLong(csv[6]);
+        parkingSlotId = Long.parseLong(csv[6]);
     }
 }

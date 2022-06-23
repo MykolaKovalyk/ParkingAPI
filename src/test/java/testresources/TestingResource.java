@@ -13,7 +13,7 @@ public class TestingResource extends Resource {
     public boolean someBoolean;
 
     @Override
-    public String[] toArrayOfStrings() {
+    public String[] getFieldValues() {
         return new String[] {
                 Long.toString(getId()),
                 Integer.toString(someInt),
@@ -23,7 +23,7 @@ public class TestingResource extends Resource {
     }
 
     @Override
-    public String[] fieldNamesToStringArray() {
+    public String[] getFieldNames() {
         return new String[] {
                 "someInt",
                 "someString",
@@ -32,7 +32,7 @@ public class TestingResource extends Resource {
     }
 
     @Override
-    public void fromArrayOfStrings(String[] csv) {
+    public void setFieldValues(String[] csv) {
         setId(Long.parseLong(csv[0]));
         someInt = Integer.parseInt(csv[1]);
         someString =  csv[2];

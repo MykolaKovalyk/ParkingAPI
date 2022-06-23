@@ -6,12 +6,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class ClientCardRepository extends CSVRepository<ClientCard> {
+    public ClientCardRepository() {
+        super("data/client_cards");
+    }
+
     @Override
     protected ClientCard createNewResource() {
         return new ClientCard();
-    }
-
-    public ClientCardRepository() {
-        super("data/client_cards");
     }
 }

@@ -25,22 +25,22 @@ To run the app, you need Java 17 and Apache Maven 3.8.5 installed and configured
 # Available Requests
 
 1. `GET`:`http://{ip}:{port}/clients/{clientId}` - Get client by id;
-2. `POST`:`http://{ip}:{port}/shops/{shopId}/clients/add/{name}?phone={required}&email={default:null}` - Add new client. Shop id is used to determine where the client was registered;
+2. `POST`:`http://{ip}:{port}/clients/{name}?phone={required}&email={default:null}&shopId={required}` - Add new client. Shop id is used to determine where the client was registered;
 
 
 3. `GET`:`http://{ip}:{port}/client-cards/{cardId}` - Get client card by its id;
 
 
 4. `GET`:`http://{ip}:{port}/parking-facilities/{facilityId}` - Get parking facility by id;
-5. `POST`:`http://{ip}:{port}/shops/{shopId}/parking-facilities/add?address={required}` - Add a new parking facility to the shop;
+5. `POST`:`http://{ip}:{port}/shops/{shopId}/parking-facilities?address={required}` - Add a new parking facility to the shop;
 
 
 6. `GET`:`http://{ip}:{port}/parking-facilities/{parkingFacilityId}/parking-slots` - Get all parking slots of the parking facility;
 7. `GET`:`http://{ip}:{port}/parking-slots/{parkingSlotId}` - Get parking slot by its id;
-8. `POST`:`http://{ip}:{port}/parking-facilities/{parkingFacilityId}/parking-slots/add?forDisabled={default:false}` - Add a new parking slot
-9. `DELETE`:`http://{ip}:{port}/parking-slots/{parkingSlotId}/remove` -  Remove parking slot by its id;
-10. `PUT`:`http://{ip}:{port}/parking-facilities/{parkingFacilityId}/take-slot/{carNumber}?forDisabled={default:false}&clientId={default:0}` -  Take parking slot;
-11. `PUT`:`http://{ip}:{port}/parking-tickets/{ticketId}/free` -  Free parking slot
+8. `POST`:`http://{ip}:{port}/parking-facilities/{parkingFacilityId}/parking-slots?forDisabled={default:false}` - Add a new parking slot
+9. `DELETE`:`http://{ip}:{port}/parking-slots/{parkingSlotId}` -  Remove parking slot by its id;
+10. `PUT`:`http://{ip}:{port}/parking-facilities/{parkingFacilityId}/slots/take?carNumber={required}&forDisabled={default:false}&clientId={default:0}` -  Take parking slot;
+11. `PUT`:`http://{ip}:{port}/parking-tickets/{ticketId}/close` -  Free parking slot
 
 
 12. `GET`:`http://{ip}:{port}/parking-facilities/{facilityId}/parking-tickets` - Get all parking tickets of this parking facility;

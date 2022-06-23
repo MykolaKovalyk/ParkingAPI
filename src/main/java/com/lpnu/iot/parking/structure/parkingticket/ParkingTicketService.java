@@ -13,7 +13,6 @@ public class ParkingTicketService {
     private ParkingTicketRepository parkingTicketRepository;
 
 
-
     public Map<Long, ParkingTicket> getTickets(Long facilityId) {
         return parkingTicketRepository.findAll(parkingTicket ->
                 parkingTicket.getParkingFacilityId().equals(facilityId));

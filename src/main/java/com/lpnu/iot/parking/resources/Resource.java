@@ -1,5 +1,6 @@
 package com.lpnu.iot.parking.resources;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,12 +10,16 @@ import java.text.SimpleDateFormat;
 @Setter
 public abstract class Resource {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
+    protected static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     private Long id = 0L;
 
-    public abstract String[] toArrayOfStrings();
-    public abstract String[] fieldNamesToStringArray();
-    public abstract void fromArrayOfStrings(String[] csv);
+    @JsonIgnore
+    public abstract String[] getFieldValues();
+
+    @JsonIgnore
+    public abstract String[] getFieldNames();
+
+    @JsonIgnore
+    public abstract void setFieldValues(String[] csv);
 }

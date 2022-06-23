@@ -1,7 +1,8 @@
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import testresources.TestingRepository;
 import testresources.TestingResource;
-
 
 import java.io.File;
 import java.util.Calendar;
@@ -12,13 +13,47 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestRepository {
 
     private static TestingRepository repository;
-    private  static TestingResource[] resources;
+    private static TestingResource[] resources;
+
+    private static void WriteReadData() throws Exception {
+        var calendar = Calendar.getInstance();
+
+        var dayBefore = calendar.get(Calendar.DAY_OF_MONTH);
+        repository.writeDataToFile();
+
+        repository.readDataFromFile();
+        var dayAfter = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (dayBefore != dayAfter) {
+            System.out.println("Edge case: day mismatch, repeating the test...");
+
+            WriteReadData();
+        }
+    }
+
+    private static void deleteDirectory(String path) {
+        File root = new File(path);
+        File[] subfiles = root.listFiles();
+
+        if (subfiles != null) {
+            for (File subfile : subfiles) {
+
+                if (subfile.isDirectory()) {
+                    deleteDirectory(subfile.getAbsolutePath());
+                }
+
+                subfile.delete();
+            }
+        }
+
+        root.delete();
+    }
 
     @BeforeEach
     public void setUp() {
         repository = new TestingRepository();
 
-        resources =  new TestingResource[] {
+        resources = new TestingResource[]{
                 new TestingResource(-4, "William", true),
                 new TestingResource(5836, "Marcus", false),
                 new TestingResource(7, "Jenny, Robert", true),
@@ -28,7 +63,7 @@ public class TestRepository {
                 new TestingResource(6, "Whatever,,,", false),
         };
 
-        for (var resource: resources) {
+        for (var resource : resources) {
             repository.add(resource);
         }
     }
@@ -38,13 +73,12 @@ public class TestRepository {
         deleteDirectory("test/");
     }
 
-
     @Test
     public void testRepositoryIO() throws Exception {
 
         WriteReadData();
 
-        var found =  repository.findAll();
+        var found = repository.findAll();
 
         assertEquals(found.get(3L).someString, resources[2].someString);
         assertTrue(found.get(1L).someString.equals(resources[0].someString) &&
@@ -59,7 +93,7 @@ public class TestRepository {
 
         var found = repository.findAll();
 
-        for (var resource: resources) {
+        for (var resource : resources) {
             assertEquals(resource.someString, resources[resource.getId().intValue() - 1].someString);
         }
     }
@@ -67,22 +101,22 @@ public class TestRepository {
     @Test
     public void testRepositoryFindById() {
 
-        var found =  repository.findById(4L);
+        var found = repository.findById(4L);
         assertEquals(found.someString, resources[3].someString);
 
         found = repository.findById(5L);
         assertEquals(found.someString, resources[4].someString);
 
-        found =  repository.findById(6L);
+        found = repository.findById(6L);
         assertEquals(found.someString, resources[5].someString);
 
-        found =  repository.findById(8L);
+        found = repository.findById(8L);
         assertNull(found);
     }
 
     @Test
     public void testRepositoryFindAllByPredicate() {
-        var found =  repository.findAll(resource -> resource.someBoolean);
+        var found = repository.findAll(resource -> resource.someBoolean);
 
         assertTrue(found.containsKey(1L));
         assertTrue(found.containsKey(3L));
@@ -108,7 +142,7 @@ public class TestRepository {
     @Test
     public void testRepositoryFindAnyByPredicate() {
 
-        var found =  repository.findAny(resource -> resource.someString.endsWith("rt"));
+        var found = repository.findAny(resource -> resource.someString.endsWith("rt"));
         assertEquals(found.someString, resources[2].someString);
 
         found = repository.findAny(resource -> resource.someInt == 6);
@@ -117,7 +151,7 @@ public class TestRepository {
 
     @Test
     public void testRepositoryReplace() {
-        var replacement =  new TestingResource(542, ";*!@#$%^&*()_+,.{}", true);
+        var replacement = new TestingResource(542, ";*!@#$%^&*()_+,.{}", true);
         var original = repository.replace(4L, replacement);
 
         var found = repository.findAny(resource -> resource.someInt == 542);
@@ -131,7 +165,7 @@ public class TestRepository {
 
     @Test
     public void testRepositoryRemoveAndAddIfPresent() {
-        var removed  =  repository.remove(5L);
+        var removed = repository.remove(5L);
 
         assertNull(repository.findById(5L));
 
@@ -145,41 +179,6 @@ public class TestRepository {
         assertNull(repository.addOrGetIfPresent(5L, removed));
 
         assertEquals(repository.findById(5L).someString, resources[4].someString);
-    }
-
-
-    private static  void WriteReadData() throws Exception {
-        var calendar = Calendar.getInstance();
-
-        var dayBefore = calendar.get(Calendar.DAY_OF_MONTH);
-        repository.writeDataToFile();
-
-        repository.readDataFromFile();
-        var dayAfter = calendar.get(Calendar.DAY_OF_MONTH);
-
-        if(dayBefore != dayAfter) {
-            System.out.println("Edge case: day mismatch, repeating the test...");
-
-            WriteReadData();
-        }
-    }
-
-    private static void deleteDirectory(String path) {
-        File root =  new File(path);
-        File[] subfiles = root.listFiles();
-
-        if (subfiles != null) {
-            for (File subfile : subfiles) {
-
-                if (subfile.isDirectory()) {
-                    deleteDirectory(subfile.getAbsolutePath());
-                }
-
-                subfile.delete();
-            }
-        }
-
-        root.delete();
     }
 
 }

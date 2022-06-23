@@ -17,8 +17,8 @@ public class Client extends Resource {
     private Long cardId;
 
     @Override
-    public String[] toArrayOfStrings() {
-        return new String[] {
+    public String[] getFieldValues() {
+        return new String[]{
                 Long.toString(getId()),
                 name,
                 phoneNumber,
@@ -28,8 +28,8 @@ public class Client extends Resource {
     }
 
     @Override
-    public String[] fieldNamesToStringArray() {
-        return new String[] {
+    public String[] getFieldNames() {
+        return new String[]{
                 "id",
                 "name",
                 "phoneNumber",
@@ -39,8 +39,8 @@ public class Client extends Resource {
     }
 
     @Override
-    public void fromArrayOfStrings(String[] csv) {
-         setId(Long.parseLong(csv[0]));
+    public void setFieldValues(String[] csv) {
+        setId(Long.parseLong(csv[0]));
         name = csv[1];
         phoneNumber = csv[2];
         email = csv[3];

@@ -12,11 +12,8 @@ public class ClientCardController {
     @Autowired
     private ClientCardService clientCardService;
 
-    @GetMapping(path =
-    "client-cards/{cardId}")
-    public ClientCard getClientCard(
-            @PathVariable Long cardId
-    ) {
+    @GetMapping(path = "client-cards/{cardId}")
+    public ClientCard getClientCard(@PathVariable Long cardId) {
         return clientCardService.getClientCard(cardId);
     }
 }

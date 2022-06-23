@@ -16,8 +16,8 @@ public class ParkingFacility extends Resource {
     private Integer countOfParkingSlots;
 
     @Override
-    public String[] toArrayOfStrings() {
-        return new String[] {
+    public String[] getFieldValues() {
+        return new String[]{
                 Long.toString(getId()),
                 Long.toString(belongingShopId),
                 address,
@@ -26,8 +26,8 @@ public class ParkingFacility extends Resource {
     }
 
     @Override
-    public String[] fieldNamesToStringArray() {
-        return new String[] {
+    public String[] getFieldNames() {
+        return new String[]{
                 "id",
                 "belongingShopId",
                 "address",
@@ -36,7 +36,7 @@ public class ParkingFacility extends Resource {
     }
 
     @Override
-    public void fromArrayOfStrings(String[] csv) {
+    public void setFieldValues(String[] csv) {
         setId(Long.parseLong(csv[0]));
         belongingShopId = Long.parseLong(csv[1]);
         address = csv[2];
