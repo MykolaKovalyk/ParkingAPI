@@ -5,7 +5,9 @@ import com.lpnu.iot.parking.resources.ParkingTicket;
 import com.lpnu.iot.parking.structure.parkingfacility.ParkingFacilityRepository;
 import com.lpnu.iot.parking.structure.parkingticket.ParkingTicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.Map;
@@ -18,20 +20,26 @@ public class ParkingSlotService {
     @Autowired private ParkingFacilityRepository parkingFacilityRepository;
 
     public Map<Long, ParkingSlot> getParkingSlots(Long parkingFacilityId) {
-
         return parkingSlotRepository.findAll(parkingSlot ->
                 parkingSlot.getParkingFacilityId().equals(parkingFacilityId));
     }
 
     public ParkingSlot getParkingSlot(Long parkingSlotId) {
-        return parkingSlotRepository.findById(parkingSlotId);
+        var found =  parkingSlotRepository.findById(parkingSlotId);
+        if (found == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "there is no slot with id " + parkingSlotId);
+        }
+
+        return found;
     }
 
     public ParkingSlot addParkingSlot(Long parkingFacilityId, Boolean forDisabled) throws Exception {
 
         var facilityToAddSlotsTo = parkingFacilityRepository.findById(parkingFacilityId);
         if (facilityToAddSlotsTo == null) {
-            throw new IllegalArgumentException("Non-existent parking facility id");
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "there is no facility with id " + parkingFacilityId);
         }
 
         var added = parkingSlotRepository.add(
@@ -48,12 +56,13 @@ public class ParkingSlotService {
 
         var removed = parkingSlotRepository.remove(parkingSlotId);
         if (removed == null) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "there is no slot with id " + parkingSlotId);
         }
 
         var facilityToRemoveFrom = parkingFacilityRepository.findById(removed.getParkingFacilityId());
         if (facilityToRemoveFrom == null) {
-            throw new IllegalArgumentException("Non-existent parking facility id");
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "there is no facility with id " + removed.getParkingFacilityId());
         }
 
         facilityToRemoveFrom.setCountOfParkingSlots(facilityToRemoveFrom.getCountOfParkingSlots() - 1);

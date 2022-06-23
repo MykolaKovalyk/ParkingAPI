@@ -2,7 +2,9 @@ package com.lpnu.iot.parking.structure.parkingticket;
 
 import com.lpnu.iot.parking.resources.ParkingTicket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -19,6 +21,12 @@ public class ParkingTicketService {
     }
 
     public ParkingTicket getTicket(Long ticketId) {
-        return parkingTicketRepository.findById(ticketId);
+        var found = parkingTicketRepository.findById(ticketId);
+        if (found == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "ticket with id " + ticketId + " doesn't exist.");
+        }
+
+        return found;
     }
 }

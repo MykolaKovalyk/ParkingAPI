@@ -4,7 +4,9 @@ import com.lpnu.iot.parking.resources.Client;
 import com.lpnu.iot.parking.resources.ClientCard;
 import com.lpnu.iot.parking.structure.clientcard.ClientCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 
@@ -19,7 +21,13 @@ public class ClientService {
 
 
     public Client getClient(Long clientId) {
-        return clientRepository.findById(clientId);
+        var found = clientRepository.findById(clientId);
+        if (found == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "client with id " + clientId + "doesn't exist.");
+        }
+
+        return found;
     }
 
     public Client addClient(

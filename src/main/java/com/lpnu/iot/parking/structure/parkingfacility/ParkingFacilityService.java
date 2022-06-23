@@ -2,7 +2,9 @@ package com.lpnu.iot.parking.structure.parkingfacility;
 
 import com.lpnu.iot.parking.resources.ParkingFacility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -13,11 +15,18 @@ public class ParkingFacilityService {
     private ParkingFacilityRepository parkingFacilityRepository;
 
     public Map<Long, ParkingFacility> getParkingFacilities(Long shopId) {
-        return parkingFacilityRepository.findAll(parkingFacility -> parkingFacility.getBelongingShopId().equals(shopId));
+        return parkingFacilityRepository
+                .findAll(parkingFacility -> parkingFacility.getBelongingShopId().equals(shopId));
     }
 
     public ParkingFacility getParkingFacility(Long facilityId) {
-        return parkingFacilityRepository.findById(facilityId);
+        var found = parkingFacilityRepository.findById(facilityId);
+        if (found == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "facility with id " + facilityId + "doesn't exist.");
+        }
+
+        return found;
     }
 
     public ParkingFacility addParkingFacility(Long shopId, String address) throws Exception {
