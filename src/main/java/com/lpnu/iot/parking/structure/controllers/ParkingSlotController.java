@@ -1,7 +1,8 @@
-package com.lpnu.iot.parking.structure.parkingslot;
+package com.lpnu.iot.parking.structure.controllers;
 
 import com.lpnu.iot.parking.resources.ParkingSlot;
 import com.lpnu.iot.parking.resources.ParkingTicket;
+import com.lpnu.iot.parking.structure.services.ParkingSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

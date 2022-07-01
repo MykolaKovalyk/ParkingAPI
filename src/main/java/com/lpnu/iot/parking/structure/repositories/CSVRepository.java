@@ -1,4 +1,4 @@
-package com.lpnu.iot.parking.structure;
+package com.lpnu.iot.parking.structure.repositories;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;

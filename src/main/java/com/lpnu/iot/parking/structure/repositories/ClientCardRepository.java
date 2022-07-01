@@ -1,7 +1,6 @@
-package com.lpnu.iot.parking.structure.clientcard;
+package com.lpnu.iot.parking.structure.repositories;
 
 import com.lpnu.iot.parking.resources.ClientCard;
-import com.lpnu.iot.parking.structure.CSVRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

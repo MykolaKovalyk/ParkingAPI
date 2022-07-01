@@ -1,9 +1,10 @@
-package com.lpnu.iot.parking.structure.parkingslot;
+package com.lpnu.iot.parking.structure.services;
 
 import com.lpnu.iot.parking.resources.ParkingSlot;
 import com.lpnu.iot.parking.resources.ParkingTicket;
-import com.lpnu.iot.parking.structure.parkingfacility.ParkingFacilityRepository;
-import com.lpnu.iot.parking.structure.parkingticket.ParkingTicketRepository;
+import com.lpnu.iot.parking.structure.repositories.ParkingFacilityRepository;
+import com.lpnu.iot.parking.structure.repositories.ParkingSlotRepository;
+import com.lpnu.iot.parking.structure.repositories.ParkingTicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
